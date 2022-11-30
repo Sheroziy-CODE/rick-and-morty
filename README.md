@@ -5,7 +5,7 @@
 
 ## About The Project
 
-Rich and Morty small project about ....
+Rick and Morty small project about the Rick and Morty Series, where the Android Mobile App suppose to show all heroes of the series and information about them.
 
 ### The App Overview
 
@@ -13,8 +13,7 @@ Rich and Morty small project about ....
 
 ### Built With
 
-* This project uses the ......
-
+* This project is written in Kotlin and uses Jetpack Compose toolkit.
 
 
 ## Structure
@@ -23,17 +22,14 @@ Rich and Morty small project about ....
 
 ## Coding style conventions
 
-
 Rules:
 
 - Omit needless words
 - Every word should convey what your variable/function/class is doing.
-- Some file systems are not case-sensitive, so many projects require filenames to be all lowercase. Using a separating character allows names to still be readable in that form. Using underscores as the separator ensures that the name is still a valid Dart identifier, which may be helpful if the language later supports symbolic imports.
 - All folder should be snake_case, example folders: models, style, floor_plan
-- All files of lib (related to cross-platform apps) should be snake_case + the name of the folder (in most cases), example files: api_model, floor_plan_screen
-- All files inside android and ios folders should be in UpperCamelCase (related to specific platform) + the name of the folder (in most cases), example files: FloorPlansScreen, ApiModel
+- All files should be UpperCamelCase + the name of the folder (in most cases), example files: ApiModel, MainScreenActivity
 - All Class names should follow UpperCamelCase rule. Example: FindTable.
-
+- All Variables names should follow LowerCamel case with
 
 
 ## Contact
