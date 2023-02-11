@@ -6,8 +6,7 @@ import rick_and_morty.data.model.RickAndMortyResponseDto
 import rick_and_morty.data.api.ApiConstants
 
 interface RickAndMortyApiRemoteDataSource {
-
-    @GET(ApiConstants.CHARACTERS_ENDPOINT)
+    @GET("character")
     suspend fun fetchRickAndMortyData(@Query("page") page: Int): RickAndMortyResponseDto
 
 }
