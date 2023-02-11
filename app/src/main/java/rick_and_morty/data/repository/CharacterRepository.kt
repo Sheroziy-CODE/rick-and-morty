@@ -14,8 +14,8 @@ class CharacterRepository @Inject constructor(
 ){
     
    fun getCharacters(page: Int): Flow<List<CharacterResultsDto>> = flow {
-        emit(rickAndMortyApiRemoteDataSource.fetchRickAndMortyData(page).results!!)
-    }.flowOn(Dispatchers.Default)
+        emit(rickAndMortyApiRemoteDataSource.fetchRickAndMortyData(page).results)
+    }
 
 
 /*    suspend fun getRickAndMortyInfo(page: Int): List<InfoDto> {
