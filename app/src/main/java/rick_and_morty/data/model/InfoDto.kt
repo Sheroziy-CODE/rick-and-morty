@@ -7,11 +7,11 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class InfoDto(
     @Json(name = "count")
-    val count: Int? = null,
+    val count: Int,
     @Json(name = "next")
     val next: String? = null,
     @Json(name = "pages")
-    val pages: Int = 1,
+    val pages: Int,
     @Json(name = "prev")
-    val prev: Any? = null
+    val prev: String? = null
 )
