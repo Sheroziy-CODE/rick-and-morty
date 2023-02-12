@@ -1,5 +1,6 @@
 package rick_and_morty.ui.characters
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,15 +21,22 @@ class CharactersViewModel @Inject constructor(
     val characters = _characters.asStateFlow()
 
     fun getCharacters(page: Int) {
-        viewModelScope.launch {
-            characterRepository.getCharacters(page)
-                .collect{ characters ->
-                    _characters.update {
-                        it + characters
+        try {
+            viewModelScope.launch {
+                characterRepository.getCharacters(page)
+                    .collect{ characters ->
+                        _characters.update {
+                            it + characters
+                        }
                     }
-                }
-            initialLoad = false
+                initialLoad = false
+            }
         }
+
+        catch(error: Exception) {
+            Log.i("GetCharacterError", error.toString())
+        }
+
     }
 }
 
