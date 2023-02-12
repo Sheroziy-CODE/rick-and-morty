@@ -9,8 +9,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import rick_and_morty.ui.characters.CharactersViewModel
 
 @Composable
-fun CharacterList() {
-    val charactersViewModel = viewModel(modelClass = CharactersViewModel::class.java)
+fun CharacterList(charactersViewModel: CharactersViewModel = viewModel(modelClass = CharactersViewModel::class.java)) {
 
     var page = 1;
 
