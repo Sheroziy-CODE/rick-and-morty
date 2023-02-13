@@ -15,28 +15,34 @@ class CharactersViewModel @Inject constructor(
     private val characterRepository: CharacterRepository
 ) : ViewModel(){
 
-    var initialLoad: Boolean = true
+    private var initialLoad: Boolean = true
+    private var page = 1;
 
     private var _characters = MutableStateFlow<List<CharacterResultsDto>>(emptyList())
     val characters = _characters.asStateFlow()
 
-    fun getCharacters(page: Int) {
+    init {
+        getCharacters()
+    }
+
+    fun getCharacters() {
         try {
-            viewModelScope.launch {
-                characterRepository.getCharacters(page)
-                    .collect{ characters ->
-                        _characters.update {
-                            it + characters
+            initialLoad = false
+            if (!initialLoad) {
+                viewModelScope.launch {
+                    characterRepository.getCharacters(page)
+                        .collect { characters ->
+                            _characters.update {
+                                it + characters
+                            }
                         }
-                    }
-                initialLoad = false
+                }
+                page += 1;
             }
         }
-
         catch(error: Exception) {
-            Log.i("GetCharacterError", error.toString())
-        }
-
+               Log.i("GetCharacterError", error.toString())
+       }
     }
 }
 

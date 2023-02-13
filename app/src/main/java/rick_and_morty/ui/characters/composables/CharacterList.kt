@@ -11,10 +11,6 @@ import rick_and_morty.ui.characters.CharactersViewModel
 @Composable
 fun CharacterList(charactersViewModel: CharactersViewModel = viewModel(modelClass = CharactersViewModel::class.java)) {
 
-    var page = 1;
-
-    charactersViewModel.getCharacters(page)
-
     val characters = charactersViewModel.characters.collectAsState(initial = emptyList())
 
     LazyColumn (
@@ -26,11 +22,8 @@ fun CharacterList(charactersViewModel: CharactersViewModel = viewModel(modelClas
         }
         item {
             LaunchedEffect(true) {
-                if (!charactersViewModel.initialLoad) {
-                    page += 1
-                    charactersViewModel.getCharacters(page)
-                }
-            }
+                    charactersViewModel.getCharacters()
+          }
         }
     }
 }
