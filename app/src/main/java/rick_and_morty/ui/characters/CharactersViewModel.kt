@@ -23,8 +23,8 @@ class CharactersViewModel @Inject constructor(
     private var initialLoad: Boolean = true
     private var page = 1;
 
-    private var _characters = MutableLiveData<List<CharacterResultsDto>>(emptyList())
-    val characters: LiveData<List<CharacterResultsDto>> = _characters
+    private var _characters = MutableStateFlow<List<CharacterResultsDto>>(emptyList())
+    val characters: StateFlow<List<CharacterResultsDto>> = _characters
 
     init {
         getCharacters()
@@ -36,7 +36,9 @@ class CharactersViewModel @Inject constructor(
             viewModelScope.launch {
                 try {
                     val getCharacter = characterRepository.getCharacters(page)
-                    _characters.value = _characters.value?.plus(getCharacter)
+                    _characters.update {
+                        it + getCharacter
+                    }
                         page += 1;
                     }
                     catch(error: Exception) {

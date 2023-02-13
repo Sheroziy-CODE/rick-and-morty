@@ -12,8 +12,7 @@ import rick_and_morty.ui.characters.CharactersViewModel
 @Composable
 fun CharacterList(charactersViewModel: CharactersViewModel = viewModel(modelClass = CharactersViewModel::class.java)) {
 
-    val characters = charactersViewModel.characters.observeAsState(emptyList())
-
+    val characters = charactersViewModel.characters.collectAsState(emptyList())
     LazyColumn (
         verticalArrangement = Arrangement.spacedBy(5.dp)
     ) {
