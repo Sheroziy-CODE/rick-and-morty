@@ -41,7 +41,7 @@ class CharactersViewModel @Inject constructor(
             }
         }
         catch(error: Exception) {
-               Log.i("GetCharacterError", error.toString())
+               Log.e("GetCharacterError", error.toString())
        }
     }
 }
