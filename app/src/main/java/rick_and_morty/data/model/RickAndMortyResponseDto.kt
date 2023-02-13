@@ -9,5 +9,5 @@ data class RickAndMortyResponseDto(
     @Json(name = "info")
     val infoDto: InfoDto,
     @Json(name = "results")
-    var results: List<CharacterResultsDto>
+    val results: List<CharacterResultsDto>
 )
