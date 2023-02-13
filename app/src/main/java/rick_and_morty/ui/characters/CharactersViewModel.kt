@@ -23,26 +23,26 @@ class CharactersViewModel @Inject constructor(
 
     init {
         getCharacters()
+        initialLoad = false
     }
 
     fun getCharacters() {
-        try {
-            initialLoad = false
-            if (!initialLoad) {
-                viewModelScope.launch {
+        if (!initialLoad) {
+            viewModelScope.launch {
+                try {
                     characterRepository.getCharacters(page)
                         .collect { characters ->
                             _characters.update {
                                 it + characters
                             }
                         }
-                }
-                page += 1;
+                        page += 1;
+                    }
+                    catch(error: Exception) {
+                        Log.e("GetCharacterError", error.toString())
+                    }
             }
         }
-        catch(error: Exception) {
-               Log.e("GetCharacterError", error.toString())
-       }
     }
 }
 

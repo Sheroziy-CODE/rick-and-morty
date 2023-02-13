@@ -10,7 +10,7 @@ class CharactersActivity : AppCompatActivity(R.layout.activity_character) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (savedInstanceState != null) {
+        if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.main_container, CharactersFragment())
                 .commit()
