@@ -44,7 +44,7 @@ fun CharacterRow(characterResultsDto: CharacterResultsDto) {
                     color = Color.White)
                 Spacer(modifier = Modifier.padding(top = 10.dp))
                 Text(
-                    text = "Last known location: \n${characterResultsDto.locationDto?.name}",
+                    text = "Last known location: \n${characterResultsDto.locationDto.name}",
                     fontSize = 15.sp,
                     color = Color.White)
                 Spacer(modifier = Modifier.padding(top = 10.dp))

@@ -4,6 +4,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import rick_and_morty.ui.characters.CharactersViewModel
@@ -11,7 +12,7 @@ import rick_and_morty.ui.characters.CharactersViewModel
 @Composable
 fun CharacterList(charactersViewModel: CharactersViewModel = viewModel(modelClass = CharactersViewModel::class.java)) {
 
-    val characters = charactersViewModel.characters.collectAsState(initial = emptyList())
+    val characters = charactersViewModel.characters.observeAsState(emptyList())
 
     LazyColumn (
         verticalArrangement = Arrangement.spacedBy(5.dp)

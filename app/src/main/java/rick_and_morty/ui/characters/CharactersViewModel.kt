@@ -1,6 +1,11 @@
 package rick_and_morty.ui.characters
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,8 +23,8 @@ class CharactersViewModel @Inject constructor(
     private var initialLoad: Boolean = true
     private var page = 1;
 
-    private var _characters = MutableStateFlow<List<CharacterResultsDto>>(emptyList())
-    val characters = _characters.asStateFlow()
+    private var _characters = MutableLiveData<List<CharacterResultsDto>>(emptyList())
+    val characters: LiveData<List<CharacterResultsDto>> = _characters
 
     init {
         getCharacters()
@@ -30,12 +35,8 @@ class CharactersViewModel @Inject constructor(
         if (!initialLoad) {
             viewModelScope.launch {
                 try {
-                    characterRepository.getCharacters(page)
-                        .collect { characters ->
-                            _characters.update {
-                                it + characters
-                            }
-                        }
+                    val getCharacter = characterRepository.getCharacters(page)
+                    _characters.value = _characters.value?.plus(getCharacter)
                         page += 1;
                     }
                     catch(error: Exception) {

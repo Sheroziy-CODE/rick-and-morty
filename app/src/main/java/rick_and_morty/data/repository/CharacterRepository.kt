@@ -13,8 +13,8 @@ class CharacterRepository @Inject constructor(
     private val rickAndMortyApiRemoteDataSource: RickAndMortyApiRemoteDataSource
 ){
     
-   fun getCharacters(page: Int): Flow<List<CharacterResultsDto>> = flow {
-        emit(rickAndMortyApiRemoteDataSource.fetchRickAndMortyData(page).results)
+   suspend fun getCharacters(page: Int): List<CharacterResultsDto> {
+       return rickAndMortyApiRemoteDataSource.fetchRickAndMortyData(page).results
     }
 
 
