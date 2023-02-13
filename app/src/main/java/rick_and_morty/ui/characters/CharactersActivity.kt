@@ -6,14 +6,14 @@ import com.example.rick_and_morty.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CharactersActivity : AppCompatActivity() {
+class CharactersActivity : AppCompatActivity(R.layout.activity_character) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_character)
-
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.main_container, CharactersFragment())
-            .commit()
+        if (savedInstanceState != null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.main_container, CharactersFragment())
+                .commit()
+        }
     }
 }
