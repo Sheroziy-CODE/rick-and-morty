@@ -1,15 +1,12 @@
 package rick_and_morty.ui.characters
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import rick_and_morty.data.model.CharacterResultsDto
 import rick_and_morty.data.repository.CharacterRepository
@@ -35,7 +32,7 @@ class CharactersViewModel @Inject constructor(
         if (!initialLoad) {
             viewModelScope.launch {
                 try {
-                    val getCharacter = characterRepository.getCharacters(page)
+                    val getCharacter = characterRepository.getCharacters(page) //check calling the method
                     _characters.update {
                         it + getCharacter
                     }
