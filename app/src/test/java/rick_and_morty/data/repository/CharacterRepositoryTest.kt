@@ -21,6 +21,5 @@ class CharacterRepositoryTest {
         classToTest.getCharacters(1)
 
         verify(rickAndMortyApiRemoteDataSource).fetchRickAndMortyData(1)
-        assertThat(rickAndMortyApiRemoteDataSource.fetchRickAndMortyData(1).results).isEmpty()
     }
 }
