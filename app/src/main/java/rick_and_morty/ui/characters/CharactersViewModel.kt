@@ -32,7 +32,7 @@ class CharactersViewModel @Inject constructor(
         if (!initialLoad) {
             viewModelScope.launch {
                 try {
-                    val getCharacter = characterRepository.getCharacters(page) //check calling the method
+                    val getCharacter = characterRepository.getCharacters(page)
                     _characters.update {
                         it + getCharacter
                     }
