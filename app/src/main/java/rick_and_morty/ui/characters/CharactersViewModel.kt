@@ -24,8 +24,8 @@ class CharactersViewModel @Inject constructor(
     val characters: StateFlow<List<CharacterResultsDto>> = _characters
 
     init {
-        getCharacters()
         initialLoad = false
+        getCharacters()
     }
 
     fun getCharacters() {
