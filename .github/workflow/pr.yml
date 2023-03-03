@@ -1,14 +1,13 @@
 name: Pull Request Workflow
 
 on:
-  pull_request:
+  push:
     branches:
       - feature/*
-      - '*'
       - '!main'
 
 jobs:
-  build:
+  pull-request:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v1
