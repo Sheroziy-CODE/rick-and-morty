@@ -27,7 +27,6 @@ class CharactersViewModel @Inject constructor(
         initialLoad = false
         getCharacters()
     }
-
     fun getCharacters() {
         if (!initialLoad) {
             viewModelScope.launch {
