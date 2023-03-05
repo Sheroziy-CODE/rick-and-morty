@@ -7,6 +7,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import rick_and_morty.data.event.BusEvent
 import rick_and_morty.data.model.*
 import rick_and_morty.data.repository.CharacterRepository
 import rick_and_morty.rules.CoroutineTestRule
@@ -51,14 +52,14 @@ class CharactersViewModelTest {
     )
 
     private var characterRepository: CharacterRepository = mock {
-        onBlocking { it.getCharacters(1) } doReturn (characterResultsDto)
+        onBlocking { it.getCharacters(1) } doReturn ( BusEvent.Success(list = characterResultsDto))
     }
 
     private val classToTest by lazy { CharactersViewModel(characterRepository) }
 
     @Test
     fun `return Empty List When Init ViewModel`() = runTest {
-        assertThat(classToTest.characters.value).isEmpty()
+        assertThat(classToTest.characters.value.isSuccess).isEmpty()
     }
 
     @Test
@@ -69,7 +70,7 @@ class CharactersViewModelTest {
 
         verify(characterRepository).getCharacters(1)
 
-        assertThat(classToTest.characters.value).isEqualTo(characterResultsDto)
+        assertThat(classToTest.characters.value.isSuccess).isEqualTo(characterResultsDto)
 
     }
 
@@ -82,7 +83,7 @@ class CharactersViewModelTest {
 
         advanceUntilIdle()
 
-        assertThat(classToTest.characters.value).isEmpty()
+        assertThat(classToTest.characters.value.isSuccess).isEmpty()
     }
 
 }
