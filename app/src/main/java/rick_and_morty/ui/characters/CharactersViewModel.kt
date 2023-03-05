@@ -1,13 +1,12 @@
 package rick_and_morty.ui.characters
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import rick_and_morty.data.event.BusEvent
+import rick_and_morty.data.event.UIState
 import rick_and_morty.data.model.CharacterResultsDto
 import rick_and_morty.data.repository.CharacterRepository
 import javax.inject.Inject
@@ -20,8 +19,11 @@ class CharactersViewModel @Inject constructor(
     private var initialLoad: Boolean = true
     private var page = 1;
 
-    private var _characters = MutableStateFlow<List<CharacterResultsDto>>(emptyList())
-    val characters: StateFlow<List<CharacterResultsDto>> = _characters
+    private var _characters = MutableStateFlow(UIState())
+    val characters: StateFlow<UIState> = _characters
+
+    private var characterList = mutableListOf<CharacterResultsDto>()
+
 
     init {
         getCharacters()
@@ -29,21 +31,23 @@ class CharactersViewModel @Inject constructor(
     }
 
     fun getCharacters() {
+        _characters.update { it.copy(isLoading = true) }
         if (!initialLoad) {
             viewModelScope.launch {
-                try {
-                    val getCharacter = characterRepository.getCharacters(page)
-                    _characters.update {
-                        it + getCharacter
+                val getCharacter = characterRepository.getCharacters(page)
+                _characters.update {
+                    when(getCharacter){
+                        is BusEvent.Success -> { getCharacter.list.let { characterList.addAll(it) }
+                            it.copy(isLoading = false, isSuccess = characterList)
+                        }
+                        is BusEvent.Error -> it.copy(isLoading = false, isFailure = true, failureMessage = getCharacter.exception)
                     }
-                        page += 1;
-                    }
-                    catch(error: Exception) {
-                        Log.e("GetCharacterError", error.toString())
-                    }
+                }
+                page += 1;
             }
         }
     }
 }
+
 
 

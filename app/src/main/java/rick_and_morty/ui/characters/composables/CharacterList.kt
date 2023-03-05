@@ -6,23 +6,36 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.delay
 import rick_and_morty.ui.characters.CharactersViewModel
+import rick_and_morty.ui.widgets.AlertDialog
+import rick_and_morty.ui.widgets.CircularProgressBar
 
 @Composable
 fun CharacterList(charactersViewModel: CharactersViewModel = viewModel(modelClass = CharactersViewModel::class.java)) {
 
-    val characters = charactersViewModel.characters.collectAsState(emptyList())
-    LazyColumn (
-        verticalArrangement = Arrangement.spacedBy(5.dp)
-    ) {
+    val characters = charactersViewModel.characters.collectAsState()
 
-        items(characters.value) {characters ->
-            CharacterRow(characterResultsDto = characters)
-        }
-        item {
-            LaunchedEffect(true) {
-                    charactersViewModel.getCharacters()
-          }
-        }
+    if (characters.value.isLoading)
+    {
+        CircularProgressBar()
+
     }
+        if (!characters.value.isFailure){
+            LazyColumn (
+                verticalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+                items(characters.value.isSuccess) {characters ->
+                    CharacterRow(characterResultsDto = characters)
+                }
+                item {
+                    LaunchedEffect(true) {
+                        charactersViewModel.getCharacters()
+                    }
+                }
+            }
+        }
+        else {
+            AlertDialog(characters.value.failureMessage.toString())
+        }
 }
