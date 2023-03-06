@@ -14,9 +14,11 @@ import rick_and_morty.ui.widgets.CircularProgressBar
 fun CharacterList(charactersViewModel: CharactersViewModel = viewModel(modelClass = CharactersViewModel::class.java)) {
 
     val characters = charactersViewModel.characters.collectAsState().value
-
+    if (characters.isLoading)
+    {
+        CircularProgressBar()
+    }
     when {
-        characters.isLoading -> CircularProgressBar()
         characters.isFailure -> RickAndMortyErrorDialog(characters.failureMessage.toString())
         else -> LazyColumn (verticalArrangement = Arrangement.spacedBy(5.dp))
         {
@@ -30,5 +32,4 @@ fun CharacterList(charactersViewModel: CharactersViewModel = viewModel(modelClas
             }
         }
     }
-
 }
