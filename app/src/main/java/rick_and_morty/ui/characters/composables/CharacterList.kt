@@ -1,11 +1,11 @@
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.*
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import rick_and_morty.data.model.CharacterResultsDto
 import rick_and_morty.ui.characters.CharactersViewModel
 import rick_and_morty.ui.widgets.RickAndMortyErrorDialog
 import rick_and_morty.ui.widgets.CircularProgressBar
@@ -20,12 +20,31 @@ fun CharacterList(charactersViewModel: CharactersViewModel = viewModel(modelClas
     }
     when {
         characters.isFailure -> RickAndMortyErrorDialog(characters.failureMessage.toString())
-        else -> LazyColumn (verticalArrangement = Arrangement.spacedBy(5.dp))
-        {
-            items(characters.isSuccess) {characters ->
-                CharacterRow(characterResultsDto = characters)
+        else -> {
+            val scrollListState = rememberLazyListState()
+            LazyColumn (
+                verticalArrangement = Arrangement.spacedBy(5.dp),
+                state = scrollListState
+            ) {
+                items(characters.isSuccess) { characters ->
+                    CharacterRow(characterResultsDto = characters)
+                }
             }
-            item {
+            val userIsAtBottom by remember{
+                derivedStateOf {
+                    val layoutInfo = scrollListState.layoutInfo
+                    val visibleItemsInfo = layoutInfo.visibleItemsInfo
+                    if (layoutInfo.totalItemsCount == 0) {
+                        false
+                    } else {
+                        val lastVisibleItem = visibleItemsInfo.last()
+                        val viewportHeight = layoutInfo.viewportEndOffset + layoutInfo.viewportStartOffset
+                        (lastVisibleItem.index + 1 == layoutInfo.totalItemsCount &&
+                                lastVisibleItem.offset + lastVisibleItem.size <= viewportHeight)
+                    }
+                }
+            }
+            if (userIsAtBottom){
                 LaunchedEffect(true) {
                     charactersViewModel.getCharacters()
                 }

@@ -7,7 +7,6 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import rick_and_morty.data.event.ResultEvent
 import rick_and_morty.data.model.*
 import rick_and_morty.data.repository.CharacterRepository
 import rick_and_morty.rules.CoroutineTestRule
