@@ -51,7 +51,7 @@ class CharactersViewModelTest {
     )
 
     private var characterRepository: CharacterRepository = mock {
-        onBlocking { it.getCharacters(1) } doReturn ( ResultEvent.Success(list = characterResultsDto))
+        onBlocking { it.getCharacters(1) } doReturn (characterResultsDto)
     }
 
     private val classToTest by lazy { CharactersViewModel(characterRepository) }
