@@ -3,19 +3,19 @@ package rick_and_morty.data.repository
 import rick_and_morty.di.RickAndMortyApiRemoteDataSource
 import javax.inject.Inject
 import rick_and_morty.data.model.CharacterResultsDto
-import rick_and_morty.data.event.BusEvent
+import rick_and_morty.data.event.ResultEvent
 
 
 class CharacterRepository @Inject constructor(
     private val rickAndMortyApiRemoteDataSource: RickAndMortyApiRemoteDataSource
 ){
     
-   suspend fun getCharacters(page: Int): BusEvent<List<CharacterResultsDto>> {
+   suspend fun getCharacters(page: Int): ResultEvent<List<CharacterResultsDto>> {
        return try {
-           BusEvent.Success(list = rickAndMortyApiRemoteDataSource.fetchRickAndMortyData(page).results)
+           ResultEvent.Success(list = rickAndMortyApiRemoteDataSource.fetchRickAndMortyData(page).results)
        }
        catch (error: Exception){
-           BusEvent.Error(exception = error)
+           ResultEvent.Error(exception = error)
        }
     }
 

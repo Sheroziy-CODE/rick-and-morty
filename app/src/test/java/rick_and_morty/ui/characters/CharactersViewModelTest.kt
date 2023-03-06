@@ -7,7 +7,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import rick_and_morty.data.event.BusEvent
+import rick_and_morty.data.event.ResultEvent
 import rick_and_morty.data.model.*
 import rick_and_morty.data.repository.CharacterRepository
 import rick_and_morty.rules.CoroutineTestRule
@@ -52,7 +52,7 @@ class CharactersViewModelTest {
     )
 
     private var characterRepository: CharacterRepository = mock {
-        onBlocking { it.getCharacters(1) } doReturn ( BusEvent.Success(list = characterResultsDto))
+        onBlocking { it.getCharacters(1) } doReturn ( ResultEvent.Success(list = characterResultsDto))
     }
 
     private val classToTest by lazy { CharactersViewModel(characterRepository) }

@@ -7,7 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 
 @Composable
-fun AlertDialog(error: String) {
+fun RickAndMortyErrorDialog(error: String) {
     val openDialog = remember { mutableStateOf(true) }
     if (openDialog.value) {
         AlertDialog(

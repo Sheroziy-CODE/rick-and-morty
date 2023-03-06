@@ -6,9 +6,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.delay
 import rick_and_morty.ui.characters.CharactersViewModel
-import rick_and_morty.ui.widgets.AlertDialog
+import rick_and_morty.ui.widgets.RickAndMortyErrorDialog
 import rick_and_morty.ui.widgets.CircularProgressBar
 
 @Composable
@@ -36,6 +35,6 @@ fun CharacterList(charactersViewModel: CharactersViewModel = viewModel(modelClas
             }
         }
         else {
-            AlertDialog(characters.value.failureMessage.toString())
+            RickAndMortyErrorDialog(characters.value.failureMessage.toString())
         }
 }
