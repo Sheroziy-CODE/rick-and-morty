@@ -14,7 +14,7 @@ class CharacterRepository @Inject constructor(
     }
 
 
-/*    suspend fun getRickAndMortyInfo(page: Int): List<InfoDto> {
-        return characterApiService.fetchAllCharacters(page).info!!
-    }*/
+    suspend fun getCharacterDetails(id: Int): CharacterResultsDto {
+        return rickAndMortyApiRemoteDataSource.fetchCharacterDetailsData(id)
+    }
 }
