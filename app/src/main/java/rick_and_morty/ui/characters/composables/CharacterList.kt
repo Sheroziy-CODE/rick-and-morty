@@ -5,7 +5,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import rick_and_morty.data.model.CharacterResultsDto
 import rick_and_morty.ui.characters.CharactersViewModel
 import rick_and_morty.ui.widgets.RickAndMortyErrorDialog
 import rick_and_morty.ui.widgets.CircularProgressBar
@@ -19,14 +18,14 @@ fun CharacterList(charactersViewModel: CharactersViewModel = viewModel(modelClas
         CircularProgressBar()
     }
     when {
-        characters.isFailure -> RickAndMortyErrorDialog(characters.failureMessage.toString())
+        characters.isFailure -> RickAndMortyErrorDialog(characters.failure.toString())
         else -> {
             val scrollListState = rememberLazyListState()
             LazyColumn (
                 verticalArrangement = Arrangement.spacedBy(5.dp),
                 state = scrollListState
             ) {
-                items(characters.isSuccess) { characters ->
+                items(characters.charactersList) { characters ->
                     CharacterRow(characterResultsDto = characters)
                 }
             }

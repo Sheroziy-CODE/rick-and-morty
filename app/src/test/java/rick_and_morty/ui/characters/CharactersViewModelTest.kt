@@ -58,7 +58,7 @@ class CharactersViewModelTest {
 
     @Test
     fun `return Empty List When Init ViewModel`() = runTest {
-        assertThat(classToTest.characters.value.isSuccess).isEmpty()
+        assertThat(classToTest.characters.value.charactersList).isEmpty()
     }
 
     @Test
@@ -69,7 +69,7 @@ class CharactersViewModelTest {
 
         verify(characterRepository).getCharacters(1)
 
-        assertThat(classToTest.characters.value.isSuccess).isEqualTo(characterResultsDto)
+        assertThat(classToTest.characters.value.charactersList).isEqualTo(characterResultsDto)
 
     }
 
@@ -82,7 +82,7 @@ class CharactersViewModelTest {
 
         advanceUntilIdle()
 
-        assertThat(classToTest.characters.value.isSuccess).isEmpty()
+        assertThat(classToTest.characters.value.charactersList).isEmpty()
     }
 
 }
