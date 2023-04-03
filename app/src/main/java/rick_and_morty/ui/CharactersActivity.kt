@@ -1,9 +1,10 @@
-package rick_and_morty.ui.characters
+package rick_and_morty.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.rick_and_morty.R
 import dagger.hilt.android.AndroidEntryPoint
+import rick_and_morty.ui.characters.CharactersFragment
 
 @AndroidEntryPoint
 class CharactersActivity : AppCompatActivity(R.layout.activity_character) {
