@@ -10,7 +10,7 @@ class CharacterRepository @Inject constructor(
 ){
     
    suspend fun getCharacters(page: Int): List<CharacterResultsDto> {
-       return rickAndMortyApiRemoteDataSource.fetchRickAndMortyData(page).results
+       return  rickAndMortyApiRemoteDataSource.fetchRickAndMortyData(page).results
     }
 
 
