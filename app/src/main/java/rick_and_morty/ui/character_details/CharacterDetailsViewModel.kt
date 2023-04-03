@@ -1,11 +1,10 @@
-package rick_and_morty.ui.characters
+package rick_and_morty.ui.character_details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import rick_and_morty.data.event.UIState
 import rick_and_morty.data.repository.CharacterRepository
 import javax.inject.Inject
 
@@ -15,8 +14,8 @@ class CharacterDetailsViewModel @Inject constructor(
 ) : ViewModel(){
 
 
-    private var _characters = MutableStateFlow(UIState())
-    val characters: StateFlow<UIState> = _characters
+    private var _characters = MutableStateFlow(CharacterDetailsUiState())
+    val characters: StateFlow<CharacterDetailsUiState> = _characters
 
 
     init {
@@ -29,12 +28,12 @@ class CharacterDetailsViewModel @Inject constructor(
                 try {
                     val getCharacterDetails = characterRepository.getCharacterDetails(id)
                     _characters.update {
-                        it.copy(isLoading = false, isSuccessDetails = getCharacterDetails)
+                        it.copy(isLoading = false, characterResultDetails = getCharacterDetails)
                     }
                 }
                 catch(error: Exception) {
                     _characters.update {
-                        it.copy(isLoading = false, isFailure = true, failureMessage = error)
+                        it.copy(isLoading = false, failure = error)
                     }
                 }
             }

@@ -1,7 +1,6 @@
-package rick_and_morty.ui.characters
+package rick_and_morty.ui.character_details
 
 import CharacterDetails
-import CharacterList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View

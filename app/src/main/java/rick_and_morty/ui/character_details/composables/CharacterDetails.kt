@@ -1,7 +1,6 @@
 import androidx.compose.runtime.*
 import androidx.lifecycle.viewmodel.compose.viewModel
-import rick_and_morty.data.model.CharacterResultsDto
-import rick_and_morty.ui.characters.CharacterDetailsViewModel
+import rick_and_morty.ui.character_details.CharacterDetailsViewModel
 import rick_and_morty.ui.widgets.RickAndMortyErrorDialog
 import rick_and_morty.ui.widgets.CircularProgressBar
 
@@ -14,7 +13,7 @@ fun CharacterDetails(characterDetailsViewModel: CharacterDetailsViewModel = view
         CircularProgressBar()
     }
     when {
-        characters.isFailure -> RickAndMortyErrorDialog(characters.failureMessage.toString())
-        else -> characters.isSuccessDetails?.let { CharacterDetailsRow(characterResultsDto = it) }
+        characters.isFailure -> RickAndMortyErrorDialog(characters.failure.toString())
+        else -> characters.characterResultDetails?.let { CharacterDetailsRow(characterResultsDto = it) }
     }
 }
