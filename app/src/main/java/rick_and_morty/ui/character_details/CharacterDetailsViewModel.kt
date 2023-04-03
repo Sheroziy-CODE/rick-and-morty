@@ -1,5 +1,6 @@
 package rick_and_morty.ui.character_details
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,19 +11,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CharacterDetailsViewModel @Inject constructor(
-    private val characterRepository: CharacterRepository
+    private val characterRepository: CharacterRepository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel(){
 
 
     private var _characters = MutableStateFlow(CharacterDetailsUiState())
     val characters: StateFlow<CharacterDetailsUiState> = _characters
 
-
-    init {
-        getCharacterDetails(1)
+    init{
+        val listItemId = savedStateHandle.get<Int>("characterID")
+        getCharacterDetails(listItemId!!)
     }
 
-    fun getCharacterDetails(id: Int) {
+    private fun getCharacterDetails(id: Int) {
         _characters.update { it.copy(isLoading = true) }
             viewModelScope.launch {
                 try {

@@ -1,6 +1,7 @@
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
@@ -15,13 +16,17 @@ import coil.compose.rememberImagePainter
 import rick_and_morty.data.model.CharacterResultsDto
 
 @Composable
-fun CharacterRow(characterResultsDto: CharacterResultsDto) {
+fun CharacterRow(
+    characterResultsDto: CharacterResultsDto,
+    onNavigateToCharacterDetails: () -> Unit
+) {
     val imagerPainter = rememberImagePainter(data = characterResultsDto.image)
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .height(180.dp)
-            .border(border = BorderStroke(width = 1.dp, color = Color.White)),
+            .border(border = BorderStroke(width = 1.dp, color = Color.White))
+            .clickable (onClick = onNavigateToCharacterDetails),
         verticalArrangement = Arrangement.Center
     ) {
         Row(
