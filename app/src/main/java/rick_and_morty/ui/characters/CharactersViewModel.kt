@@ -6,7 +6,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import rick_and_morty.data.event.UIState
-import rick_and_morty.data.model.CharacterResultsDto
 import rick_and_morty.data.repository.CharacterRepository
 import javax.inject.Inject
 
@@ -32,7 +31,7 @@ class CharactersViewModel @Inject constructor(
                 _characters.update {
                     it.copy(
                         isLoading = false,
-                        charactersList = it.charactersList + getCharacter
+                        characterResults = it.characterResults + getCharacter
                     )
                 }
                 page += 1

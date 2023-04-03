@@ -25,7 +25,7 @@ fun CharacterList(charactersViewModel: CharactersViewModel = viewModel(modelClas
                 verticalArrangement = Arrangement.spacedBy(5.dp),
                 state = scrollListState
             ) {
-                items(characters.charactersList) { characters ->
+                items(characters.characterResults) { characters ->
                     CharacterRow(characterResultsDto = characters)
                 }
             }
