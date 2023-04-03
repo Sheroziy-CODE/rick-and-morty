@@ -6,22 +6,18 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import rick_and_morty.data.event.UIState
-import rick_and_morty.data.model.CharacterResultsDto
 import rick_and_morty.data.repository.CharacterRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class CharactersViewModel @Inject constructor(
     private val characterRepository: CharacterRepository
-) : ViewModel(){
+) : ViewModel() {
 
-    private var page = 1;
+    private var page = 1
 
-    private var _characters = MutableStateFlow(UIState())
+    private val _characters = MutableStateFlow(UIState())
     val characters: StateFlow<UIState> = _characters
-
-    private var characterList = mutableListOf<CharacterResultsDto>()
-
 
     init {
         getCharacters()
@@ -29,23 +25,25 @@ class CharactersViewModel @Inject constructor(
 
     fun getCharacters() {
         _characters.update { it.copy(isLoading = true) }
-            viewModelScope.launch {
-                try {
-                    val getCharacter = characterRepository.getCharacters(page)
-                    _characters.update {
-                        getCharacter.let { characterList.addAll(it) }
-                        it.copy(isLoading = false, isSuccess = characterList)
-                    }
-                    page += 1;
+        viewModelScope.launch {
+            try {
+                val getCharacter = characterRepository.getCharacters(page)
+                _characters.update {
+                    it.copy(
+                        isLoading = false,
+                        characterResults = it.characterResults + getCharacter
+                    )
                 }
-                catch(error: Exception) {
-                    _characters.update {
-                        it.copy(isLoading = false, isFailure = true, failureMessage = error)
-                    }
+                page += 1
+            } catch (error: Exception) {
+                _characters.update {
+                    it.copy(isLoading = false, failure = error)
                 }
             }
+        }
     }
 }
+
 
 
 
