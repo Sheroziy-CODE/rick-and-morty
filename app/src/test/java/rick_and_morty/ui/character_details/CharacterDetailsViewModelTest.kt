@@ -87,6 +87,24 @@ class CharacterDetailsViewModelTest {
     }
 
     @Test
+    fun `getCharacterDetailsList returns expected list`() = runTest {
+
+        val expectedCharacterDetailsList = listOf(
+            CharacterDetails("Name", "Chicko Micko"),
+            CharacterDetails("Last known location", "Citadel of Ricks"),
+            CharacterDetails("Species", "Human"),
+            CharacterDetails("Created", "2017-11-04"),
+            CharacterDetails("Gender", "Male"),
+            CharacterDetails("Origin", "Earth (C-137)"),
+            CharacterDetails("Status", "Alive")
+        )
+
+        val characterDetailsList = classToTest.getCharacterDetailsList(characterResultsDto)
+
+        assertEquals(expectedCharacterDetailsList, characterDetailsList)
+    }
+
+    @Test
     fun `catch An Error`() = runTest {
 
         given(characterRepository.getCharacters(any())).willThrow(RuntimeException("Error"))
