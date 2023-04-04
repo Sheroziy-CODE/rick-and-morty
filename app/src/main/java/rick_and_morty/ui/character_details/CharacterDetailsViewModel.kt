@@ -16,7 +16,7 @@ class CharacterDetailsViewModel @Inject constructor(
 ) : ViewModel(){
 
 
-    private var _characterDetails = MutableStateFlow(CharacterDetailsUiState())
+    private val _characterDetails = MutableStateFlow(CharacterDetailsUiState())
     val characterDetails: StateFlow<CharacterDetailsUiState> = _characterDetails
 
     init{

@@ -1,6 +1,5 @@
 package rick_and_morty.ui.character_details.composables
 
-import android.util.Log
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -19,7 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
-import rick_and_morty.data.model.CharacterDetails
+import rick_and_morty.ui.character_details.CharacterDetails
 import rick_and_morty.data.model.CharacterResultsDto
 
 @Composable

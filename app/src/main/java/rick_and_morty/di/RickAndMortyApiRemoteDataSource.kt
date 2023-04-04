@@ -4,7 +4,6 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 import rick_and_morty.data.model.RickAndMortyResponseDto
-import rick_and_morty.data.api.ApiConstants
 import rick_and_morty.data.model.CharacterResultsDto
 
 interface RickAndMortyApiRemoteDataSource {
