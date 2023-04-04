@@ -41,16 +41,15 @@ class CharacterDetailsViewModel @Inject constructor(
                 }
             }
     }
-
-    fun getCharacterDetailsList(characterResultsDto: CharacterResultsDto): List<CharacterDetails> {
+    fun getCharacterDetailsList(): List<CharacterDetails> {
         return listOf(
-            CharacterDetails("Name", characterResultsDto.name),
-            CharacterDetails("Last known location", characterResultsDto.locationDto.name),
-            CharacterDetails("Species", characterResultsDto.species),
-            CharacterDetails("Created", characterResultsDto.created.substring(0, 10)),
-            CharacterDetails("Gender", characterResultsDto.gender),
-            CharacterDetails("Origin", characterResultsDto.originDto.name),
-            CharacterDetails("Status", characterResultsDto.status)
+            CharacterDetails("Name", characterDetails.value.characterResultDetails!!.name),
+            CharacterDetails("Last known location", characterDetails.value.characterResultDetails!!.name),
+            CharacterDetails("Species", characterDetails.value.characterResultDetails!!.species),
+            CharacterDetails("Created", characterDetails.value.characterResultDetails!!.created.substring(0, 10)),
+            CharacterDetails("Gender", characterDetails.value.characterResultDetails!!.gender),
+            CharacterDetails("Origin", characterDetails.value.characterResultDetails!!.originDto.name),
+            CharacterDetails("Status", characterDetails.value.characterResultDetails!!.status)
         )
     }
 }

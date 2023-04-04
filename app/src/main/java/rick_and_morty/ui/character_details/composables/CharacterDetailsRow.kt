@@ -37,7 +37,7 @@ fun CharacterDetailsRow(
             easing = FastOutSlowInEasing
         )
     )
-    val characterDetailsList = characterDetailsViewModel.getCharacterDetailsList(characterResultsDto)
+    val characterDetailsList = characterDetailsViewModel.getCharacterDetailsList()
 
     Column(
         modifier
