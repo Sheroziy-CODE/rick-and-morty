@@ -8,10 +8,10 @@ import rick_and_morty.ui.widgets.CircularProgressBar
 @Composable
 fun CharacterDetails(characterDetailsViewModel: CharacterDetailsViewModel = viewModel(modelClass = CharacterDetailsViewModel::class.java)) {
 
-    val characters = characterDetailsViewModel.characters.collectAsState().value
+    val characterDetails = characterDetailsViewModel.characterDetails.collectAsState().value
     when {
-        characters.isLoading -> CircularProgressBar()
-        characters.isFailure -> RickAndMortyErrorDialog(characters.failure.toString())
-        else -> characters.characterResultDetails?.let { CharacterDetailsRow(characterResultsDto = it) }
+        characterDetails.isLoading -> CircularProgressBar()
+        characterDetails.isFailure -> RickAndMortyErrorDialog(characterDetails.failure.toString())
+        else -> characterDetails.characterResultDetails?.let { CharacterDetailsRow(characterResultsDto = it) }
     }
 }

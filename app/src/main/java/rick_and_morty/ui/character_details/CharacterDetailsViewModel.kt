@@ -16,8 +16,8 @@ class CharacterDetailsViewModel @Inject constructor(
 ) : ViewModel(){
 
 
-    private var _characters = MutableStateFlow(CharacterDetailsUiState())
-    val characters: StateFlow<CharacterDetailsUiState> = _characters
+    private var _characterDetails = MutableStateFlow(CharacterDetailsUiState())
+    val characterDetails: StateFlow<CharacterDetailsUiState> = _characterDetails
 
     init{
         val listItemId = savedStateHandle.get<Int>("characterID")
@@ -25,16 +25,16 @@ class CharacterDetailsViewModel @Inject constructor(
     }
 
     private fun getCharacterDetails(id: Int) {
-        _characters.update { it.copy(isLoading = true) }
+        _characterDetails.update { it.copy(isLoading = true) }
             viewModelScope.launch {
                 try {
                     val getCharacterDetails = characterRepository.getCharacterDetails(id)
-                    _characters.update {
+                    _characterDetails.update {
                         it.copy(isLoading = false, characterResultDetails = getCharacterDetails)
                     }
                 }
                 catch(error: Exception) {
-                    _characters.update {
+                    _characterDetails.update {
                         it.copy(isLoading = false, failure = error)
                     }
                 }
