@@ -17,12 +17,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
-import rick_and_morty.ui.character_details.CharacterDetails
 import rick_and_morty.data.model.CharacterResultsDto
+import rick_and_morty.ui.character_details.CharacterDetailsViewModel
 
 @Composable
-fun CharacterDetailsRow(characterResultsDto: CharacterResultsDto, modifier: Modifier = Modifier) {
+fun CharacterDetailsRow(
+    characterResultsDto: CharacterResultsDto,
+    modifier: Modifier = Modifier,
+    characterDetailsViewModel: CharacterDetailsViewModel = viewModel(modelClass = CharacterDetailsViewModel::class.java)
+) {
     val imagePainter = rememberImagePainter(data = characterResultsDto.image)
     val imageSize by animateFloatAsState(
         targetValue = 0.5f,
@@ -32,15 +37,8 @@ fun CharacterDetailsRow(characterResultsDto: CharacterResultsDto, modifier: Modi
             easing = FastOutSlowInEasing
         )
     )
-    val characterDetailsList = listOf(
-        CharacterDetails("Name", characterResultsDto.name),
-        CharacterDetails("Last known location", characterResultsDto.locationDto.name),
-        CharacterDetails("Species", characterResultsDto.species),
-        CharacterDetails("Created", characterResultsDto.created.substring(0, 10)),
-        CharacterDetails("Gender", characterResultsDto.gender),
-        CharacterDetails("Origin", characterResultsDto.originDto.name),
-        CharacterDetails("Status", characterResultsDto.status)
-    )
+    val characterDetailsList = characterDetailsViewModel.getCharacterDetailsList(characterResultsDto)
+
     Column(
         modifier
             .fillMaxWidth()

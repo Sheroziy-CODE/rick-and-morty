@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import rick_and_morty.data.model.CharacterResultsDto
 import rick_and_morty.data.repository.CharacterRepository
 import javax.inject.Inject
 
@@ -39,6 +40,18 @@ class CharacterDetailsViewModel @Inject constructor(
                     }
                 }
             }
+    }
+
+    fun getCharacterDetailsList(characterResultsDto: CharacterResultsDto): List<CharacterDetails> {
+        return listOf(
+            CharacterDetails("Name", characterResultsDto.name),
+            CharacterDetails("Last known location", characterResultsDto.locationDto.name),
+            CharacterDetails("Species", characterResultsDto.species),
+            CharacterDetails("Created", characterResultsDto.created.substring(0, 10)),
+            CharacterDetails("Gender", characterResultsDto.gender),
+            CharacterDetails("Origin", characterResultsDto.originDto.name),
+            CharacterDetails("Status", characterResultsDto.status)
+        )
     }
 }
 
