@@ -1,6 +1,7 @@
 package rick_and_morty.ui.character_details
 
 import androidx.lifecycle.SavedStateHandle
+import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -16,7 +17,7 @@ import rick_and_morty.data.repository.CharacterRepository
 import rick_and_morty.rules.CoroutineTestRule
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class CharacterDetailsViewModelTest {
+class CharacterShortDetailsViewModelTest {
 
 
     @get:Rule
@@ -54,11 +55,24 @@ class CharacterDetailsViewModelTest {
             created = "2017-11-04T18:48:46.250Z"
         )
 
+    private val expectedCharacterShortDetailsLists = CharacterDetails(
+        characterResultsDto.image,
+        listOf(
+            CharacterShortDetails("Name", "Chicko Micko"),
+            CharacterShortDetails("Last known location", "Citadel of Ricks"),
+            CharacterShortDetails("Species", "Human"),
+            CharacterShortDetails("Created", "2017-11-04"),
+            CharacterShortDetails("Gender", "Male"),
+            CharacterShortDetails("Origin", "Earth (C-137)"),
+            CharacterShortDetails("Status", "Alive"))
+    )
+    private val expectedEmptyCharacterShortDetailsLists =
+        CharacterDetails(image="", characterShortDetailsList= emptyList())
+
     private val savedStateHandle = SavedStateHandle (mapOf("characterID" to 1))
 
     private val characterRepository: CharacterRepository = mock {
         onBlocking { it.getCharacterDetails(1) } doReturn (characterResultsDto)
-        onBlocking { it.getCharacterDetails(2) } doReturn (characterResultsDto)
     }
 
     private val classToTest by lazy {
@@ -67,53 +81,43 @@ class CharacterDetailsViewModelTest {
             savedStateHandle
         )
     }
-
     @Test
     fun `return Empty When Init ViewModel`() = runTest {
-
-        assertThat(classToTest.characterDetails.value.characterResultDetails).isNull()
+        given(characterRepository.getCharacterDetails(any())).willReturn(null)
+        assertThat(classToTest.characterDetails.value.characterResultDetails).isEqualTo(expectedEmptyCharacterShortDetailsLists)
 
     }
     @Test
     fun `return List When GetCharacterDetails Called`() = runTest {
 
-        classToTest.getCharacterDetails(2)
+        classToTest.getCharacterDetails(1)
 
         advanceUntilIdle()
 
-        verify(characterRepository).getCharacterDetails(1)
+        verify(characterRepository, times(2)).getCharacterDetails(1)
 
-        assertThat(classToTest.characterDetails.value.characterResultDetails).isEqualTo(characterResultsDto)
+        assertThat(classToTest.characterDetails.value.characterResultDetails).isEqualTo(expectedCharacterShortDetailsLists)
+        assertThat(classToTest.characterDetails.value.isLoading).isFalse()
+        assertThat(classToTest.characterDetails.value.failure).isNull()
     }
 
     @Test
     fun `getCharacterDetailsList returns expected list`() = runTest {
 
-        val expectedCharacterDetailsList = listOf(
-            CharacterDetails("Name", "Chicko Micko"),
-            CharacterDetails("Last known location", "Citadel of Ricks"),
-            CharacterDetails("Species", "Human"),
-            CharacterDetails("Created", "2017-11-04"),
-            CharacterDetails("Gender", "Male"),
-            CharacterDetails("Origin", "Earth (C-137)"),
-            CharacterDetails("Status", "Alive")
-        )
-
-        val characterDetailsList = classToTest.getCharacterDetailsList(characterResultsDto)
-
-        assertEquals(expectedCharacterDetailsList, characterDetailsList)
+        val characterDetailsList = classToTest.characterDetails.value.characterResultDetails
+        assertThat(characterDetailsList).isEqualTo(expectedCharacterShortDetailsLists)
     }
 
     @Test
     fun `catch An Error`() = runTest {
 
-        given(characterRepository.getCharacters(any())).willThrow(RuntimeException("Error"))
+        given(characterRepository.getCharacterDetails(any())).willThrow(RuntimeException("Error"))
 
         classToTest.getCharacterDetails(0)
 
-        advanceUntilIdle()
-
-        assertThat(classToTest.characterDetails.value.characterResultDetails).isNull()
+        assertThat(classToTest.characterDetails.value.characterResultDetails).isEqualTo(expectedEmptyCharacterShortDetailsLists)
+        assertThat(classToTest.characterDetails.value.isLoading).isFalse()
+        assertThat(classToTest.characterDetails.value.isFailure).isTrue()
     }
 
 }

@@ -17,18 +17,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
-import rick_and_morty.data.model.CharacterResultsDto
-import rick_and_morty.ui.character_details.CharacterDetailsViewModel
+import rick_and_morty.ui.character_details.CharacterDetails
 
 @Composable
 fun CharacterDetailsRow(
-    characterResultsDto: CharacterResultsDto,
-    modifier: Modifier = Modifier,
-    characterDetailsViewModel: CharacterDetailsViewModel = viewModel(modelClass = CharacterDetailsViewModel::class.java)
+    characterDetails: CharacterDetails,
+    modifier: Modifier = Modifier
 ) {
-    val imagePainter = rememberImagePainter(data = characterResultsDto.image)
+    val imagePainter = rememberImagePainter(data = characterDetails.image)
     val imageSize by animateFloatAsState(
         targetValue = 0.5f,
         animationSpec = tween(
@@ -37,7 +34,6 @@ fun CharacterDetailsRow(
             easing = FastOutSlowInEasing
         )
     )
-    val characterDetailsList = characterDetailsViewModel.getCharacterDetailsList()
 
     Column(
         modifier
@@ -69,7 +65,7 @@ fun CharacterDetailsRow(
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(characterDetailsList) { characterDetailsList ->
+            items(characterDetails.characterShortDetailsList) { characterDetailsList ->
                 RowComponent(spaceBetween = 5.dp) {
                     Text(
                         text = characterDetailsList.title+": ",

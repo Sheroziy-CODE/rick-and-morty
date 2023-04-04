@@ -9,8 +9,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class CharactersActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (savedInstanceState == null) {
-            setContentView(R.layout.activity_character)
-        }
+        setContentView(R.layout.activity_character)
     }
 }

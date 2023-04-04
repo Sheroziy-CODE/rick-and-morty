@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import rick_and_morty.data.model.CharacterResultsDto
 import rick_and_morty.data.repository.CharacterRepository
 import javax.inject.Inject
 
@@ -31,7 +30,17 @@ class CharacterDetailsViewModel @Inject constructor(
                 try {
                     val getCharacterDetails = characterRepository.getCharacterDetails(id)
                     _characterDetails.update {
-                        it.copy(isLoading = false, characterResultDetails = getCharacterDetails)
+                        it.copy(isLoading = false, characterResultDetails = CharacterDetails(
+                            getCharacterDetails.image,
+                            getCharacterDetailsList(
+                                getCharacterDetails.name,
+                                getCharacterDetails.locationDto.name,
+                                getCharacterDetails.species,
+                                getCharacterDetails.created,
+                                getCharacterDetails.gender,
+                                getCharacterDetails.originDto.name,
+                                getCharacterDetails.status)
+                        ))
                     }
                 }
                 catch(error: Exception) {
@@ -41,15 +50,23 @@ class CharacterDetailsViewModel @Inject constructor(
                 }
             }
     }
-    fun getCharacterDetailsList(): List<CharacterDetails> {
+    private fun getCharacterDetailsList(
+        name: String,
+        location: String,
+        species: String,
+        created: String,
+        gender: String,
+        originDto: String,
+        status: String,
+    ): List<CharacterShortDetails> {
         return listOf(
-            CharacterDetails("Name", characterDetails.value.characterResultDetails!!.name),
-            CharacterDetails("Last known location", characterDetails.value.characterResultDetails!!.name),
-            CharacterDetails("Species", characterDetails.value.characterResultDetails!!.species),
-            CharacterDetails("Created", characterDetails.value.characterResultDetails!!.created.substring(0, 10)),
-            CharacterDetails("Gender", characterDetails.value.characterResultDetails!!.gender),
-            CharacterDetails("Origin", characterDetails.value.characterResultDetails!!.originDto.name),
-            CharacterDetails("Status", characterDetails.value.characterResultDetails!!.status)
+            CharacterShortDetails("Name", name),
+            CharacterShortDetails("Last known location", location),
+            CharacterShortDetails("Species", species),
+            CharacterShortDetails("Created", created.substring(0, 10)),
+            CharacterShortDetails("Gender", gender),
+            CharacterShortDetails("Origin", originDto),
+            CharacterShortDetails("Status", status)
         )
     }
 }

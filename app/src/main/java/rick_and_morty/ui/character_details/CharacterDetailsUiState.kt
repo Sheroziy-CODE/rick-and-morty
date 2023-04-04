@@ -4,7 +4,7 @@ import rick_and_morty.data.model.CharacterResultsDto
 
 data class CharacterDetailsUiState (
     val isLoading : Boolean = true,
-    val characterResultDetails: CharacterResultsDto? = null,
+    val characterResultDetails:  CharacterDetails = CharacterDetails("", emptyList()),
     val failure: Exception? = null
 )
 {
