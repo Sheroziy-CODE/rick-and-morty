@@ -24,7 +24,7 @@ class CharacterDetailsViewModel @Inject constructor(
         getCharacterDetails(listItemId!!)
     }
 
-    private fun getCharacterDetails(id: Int) {
+    fun getCharacterDetails(id: Int) {
         _characterDetails.update { it.copy(isLoading = true) }
             viewModelScope.launch {
                 try {

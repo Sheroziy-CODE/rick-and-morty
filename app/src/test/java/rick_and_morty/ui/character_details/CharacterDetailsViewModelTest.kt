@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*
 import org.junit.Rule
@@ -53,10 +54,11 @@ class CharacterDetailsViewModelTest {
             created = "2017-11-04T18:48:46.250Z"
         )
 
-    private val savedStateHandle = SavedStateHandle (mapOf("characterID" to "1"))
+    private val savedStateHandle = SavedStateHandle (mapOf("characterID" to 1))
 
     private val characterRepository: CharacterRepository = mock {
         onBlocking { it.getCharacterDetails(1) } doReturn (characterResultsDto)
+        onBlocking { it.getCharacterDetails(2) } doReturn (characterResultsDto)
     }
 
     private val classToTest by lazy {
@@ -68,21 +70,20 @@ class CharacterDetailsViewModelTest {
 
     @Test
     fun `return Empty When Init ViewModel`() = runTest {
+
         assertThat(classToTest.characterDetails.value.characterResultDetails).isNull()
 
-/*
     }
-
     @Test
     fun `return List When GetCharacterDetails Called`() = runTest {
 
-        classToTest.getCharacterDetails(1)
+        classToTest.getCharacterDetails(2)
+
         advanceUntilIdle()
 
         verify(characterRepository).getCharacterDetails(1)
 
-        Truth.assertThat(classToTest.characterDetails.value.characterResultDetails).isEqualTo(characterResultsDto)
-
+        assertThat(classToTest.characterDetails.value.characterResultDetails).isEqualTo(characterResultsDto)
     }
 
     @Test
@@ -94,9 +95,7 @@ class CharacterDetailsViewModelTest {
 
         advanceUntilIdle()
 
-        Truth.assertThat(classToTest.characterDetails.value.characterResultDetails).isNull()
+        assertThat(classToTest.characterDetails.value.characterResultDetails).isNull()
     }
-*/
 
-}
 }
