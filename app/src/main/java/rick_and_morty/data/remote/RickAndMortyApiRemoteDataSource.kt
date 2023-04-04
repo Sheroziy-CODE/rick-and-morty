@@ -1,4 +1,4 @@
-package rick_and_morty.di
+package rick_and_morty.data.remote
 
 import retrofit2.http.GET
 import retrofit2.http.Path

@@ -1,12 +1,11 @@
 package rick_and_morty.data.repository
 
-import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import rick_and_morty.data.model.CharacterResultsDto
 import rick_and_morty.data.model.RickAndMortyResponseDto
-import rick_and_morty.di.RickAndMortyApiRemoteDataSource
+import rick_and_morty.data.remote.RickAndMortyApiRemoteDataSource
 
 class CharacterRepositoryTest {
 

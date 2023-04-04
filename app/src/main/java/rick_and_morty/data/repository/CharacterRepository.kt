@@ -1,6 +1,6 @@
 package rick_and_morty.data.repository
 
-import rick_and_morty.di.RickAndMortyApiRemoteDataSource
+import rick_and_morty.data.remote.RickAndMortyApiRemoteDataSource
 import javax.inject.Inject
 
 
