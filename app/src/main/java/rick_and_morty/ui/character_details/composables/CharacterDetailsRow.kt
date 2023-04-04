@@ -1,57 +1,92 @@
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
+package rick_and_morty.ui.character_details.composables
+
+import android.util.Log
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
+import rick_and_morty.data.model.CharacterDetails
 import rick_and_morty.data.model.CharacterResultsDto
 
 @Composable
-fun CharacterDetailsRow(characterResultsDto: CharacterResultsDto) {
-    val imagerPainter = rememberImagePainter(data = characterResultsDto.image)
+fun CharacterDetailsRow(characterResultsDto: CharacterResultsDto, modifier: Modifier = Modifier) {
+    val imagePainter = rememberImagePainter(data = characterResultsDto.image)
+    val imageSize by animateFloatAsState(
+        targetValue = 0.5f,
+        animationSpec = tween(
+            durationMillis = 300,
+            delayMillis = 50,
+            easing = FastOutSlowInEasing
+        )
+    )
+    val characterDetailsList = listOf(
+        CharacterDetails("Name", characterResultsDto.name),
+        CharacterDetails("Last known location", characterResultsDto.locationDto.name),
+        CharacterDetails("Species", characterResultsDto.species),
+        CharacterDetails("Created", characterResultsDto.created.substring(0, 10)),
+        CharacterDetails("Gender", characterResultsDto.gender),
+        CharacterDetails("Origin", characterResultsDto.originDto.name),
+        CharacterDetails("Status", characterResultsDto.status)
+    )
     Column(
-        modifier = Modifier
+        modifier
             .fillMaxWidth()
-            .height(180.dp)
-            .border(border = BorderStroke(width = 1.dp, color = Color.White)),
-        verticalArrangement = Arrangement.Center
+            .height(350.dp)
+            .border(border = BorderStroke(width = 2.dp, color = Color.White)),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            horizontalArrangement = Arrangement.Center
+        Box(
+            modifier
+                .fillMaxWidth()
+                .fillMaxHeight(imageSize),
+            contentAlignment = Alignment.Center
         ) {
             Image(
-                painter = imagerPainter,
+                painter = imagePainter,
                 contentDescription = null,
                 modifier = Modifier
-                    .padding(10.dp)
-                    .clip(CircleShape),
-                contentScale = ContentScale.Fit)
-            Column (
-                modifier = Modifier
                     .padding(5.dp)
-            ) {
-                Text (
-                    text = characterResultsDto.name,
-                    fontSize = 30.sp,
-                    color = Color.White)
-                Spacer(modifier = Modifier.padding(top = 10.dp))
-                Text(
-                    text = "Last known location: \n${characterResultsDto.locationDto.name}",
-                    fontSize = 15.sp,
-                    color = Color.White)
-                Spacer(modifier = Modifier.padding(top = 10.dp))
-                Text (
-                    text = "Species: \n${characterResultsDto.species}",
-                    fontSize = 15.sp,
-                    color = Color.White)
+                    .fillMaxSize(),
+                contentScale = ContentScale.Fit
+            )
+        }
+
+        Spacer(modifier.padding(top = 10.dp))
+
+        LazyColumn(
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(characterDetailsList) { characterDetailsList ->
+                RowComponent(spaceBetween = 5.dp) {
+                    Text(
+                        text = characterDetailsList.title+": ",
+                        fontSize = 20.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = characterDetailsList.info,
+                        fontSize = 15.sp,
+                        color = Color.White,
+                        fontWeight = FontWeight.Normal
+                    )
+                }
             }
         }
     }
