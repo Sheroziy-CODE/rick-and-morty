@@ -30,7 +30,7 @@ class CharactersViewModel @Inject constructor(
                 _characters.update {
                     it.copy(
                         isLoading = false,
-                        characterResults = if (getCharacter != null)
+                        characterResults = if (getCharacter != null) //Because of Unit test that checks Fails State
                             it.characterResults + getCharacter
                         else it.characterResults
                     )
