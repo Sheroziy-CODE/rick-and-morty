@@ -1,10 +1,10 @@
-package rick_and_morty.ui.characters
+package rick_and_morty.ui.character_details
 
 import rick_and_morty.data.model.CharacterResultsDto
 
-data class CharactersUiState (
+data class CharacterDetailsUiState (
     val isLoading : Boolean = true,
-    val characterResults: List<CharacterResultsDto> = emptyList(),
+    val characterResultDetails:  CharacterDetails ?= null,
     val failure: Exception? = null
 )
 {

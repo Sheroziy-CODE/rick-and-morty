@@ -30,7 +30,9 @@ class CharactersViewModel @Inject constructor(
                 _characters.update {
                     it.copy(
                         isLoading = false,
-                        characterResults = it.characterResults + getCharacter
+                        characterResults = if (getCharacter != null) //Because of Unit test that checks Fails State
+                            it.characterResults + getCharacter
+                        else it.characterResults
                     )
                 }
                 page += 1

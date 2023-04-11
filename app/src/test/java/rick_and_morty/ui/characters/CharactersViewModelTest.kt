@@ -1,10 +1,12 @@
 package rick_and_morty.ui.characters
 
+import androidx.test.core.app.ActivityScenario.launch
+import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.test.*
 import org.junit.Rule
 import org.junit.Test
 import rick_and_morty.data.model.*
@@ -58,6 +60,7 @@ class CharactersViewModelTest {
 
     @Test
     fun `return Empty List When Init ViewModel`() = runTest {
+        given(characterRepository.getCharacters(any())).willReturn(emptyList())
         assertThat(classToTest.characters.value.characterResults).isEmpty()
     }
 
@@ -65,24 +68,23 @@ class CharactersViewModelTest {
     fun `return List When GetCharacter Called`() = runTest {
 
         classToTest.getCharacters()
-        advanceUntilIdle()
 
         verify(characterRepository).getCharacters(1)
 
         assertThat(classToTest.characters.value.characterResults).isEqualTo(characterResultsDto)
-
+        assertThat(classToTest.characters.value.isLoading).isFalse()
+        assertThat(classToTest.characters.value.failure).isNull()
     }
 
     @Test
     fun `catch An Error`() = runTest {
-
         given(characterRepository.getCharacters(any())).willThrow(RuntimeException("Error"))
 
         classToTest.getCharacters()
 
-        advanceUntilIdle()
-
         assertThat(classToTest.characters.value.characterResults).isEmpty()
+        assertThat(classToTest.characters.value.isLoading).isFalse()
+        assertThat(classToTest.characters.value.isFailure).isTrue()
     }
 
 }

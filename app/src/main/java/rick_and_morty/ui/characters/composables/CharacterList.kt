@@ -5,12 +5,16 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import rick_and_morty.data.model.CharacterResultsDto
 import rick_and_morty.ui.characters.CharactersViewModel
 import rick_and_morty.ui.widgets.RickAndMortyErrorDialog
 import rick_and_morty.ui.widgets.CircularProgressBar
 
 @Composable
-fun CharacterList(charactersViewModel: CharactersViewModel = viewModel(modelClass = CharactersViewModel::class.java)) {
+fun CharacterList(
+    charactersViewModel: CharactersViewModel = viewModel(modelClass = CharactersViewModel::class.java),
+    onNavigateToCharacterDetails: (CharacterResultsDto) -> Unit
+) {
 
     val characters = charactersViewModel.characters.collectAsState().value
     val scrollListState = rememberLazyListState()
@@ -26,7 +30,10 @@ fun CharacterList(charactersViewModel: CharactersViewModel = viewModel(modelClas
                 state = scrollListState
             ) {
                 items(characters.characterResults) { characters ->
-                    CharacterRow(characterResultsDto = characters)
+                    CharacterRow(
+                        characterResultsDto = characters,
+                        onNavigateToCharacterDetails = { onNavigateToCharacterDetails(characters)}
+                    )
                 }
             }
             val userIsAtBottom by remember{
