@@ -12,6 +12,6 @@ fun CharacterDetails(characterDetailsViewModel: CharacterDetailsViewModel = view
     when {
         characterDetails.isLoading -> CircularProgressBar()
         characterDetails.isFailure -> RickAndMortyErrorDialog(characterDetails.failure.toString())
-        else -> CharacterDetailsRow(characterDetails = characterDetails.characterResultDetails)
+        else -> characterDetails.characterResultDetails?.let { CharacterDetailsRow(characterDetails = it) }
     }
 }

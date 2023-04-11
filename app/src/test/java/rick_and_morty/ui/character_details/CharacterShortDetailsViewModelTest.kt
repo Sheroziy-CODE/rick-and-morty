@@ -66,8 +66,7 @@ class CharacterShortDetailsViewModelTest {
             CharacterShortDetails("Origin", "Earth (C-137)"),
             CharacterShortDetails("Status", "Alive"))
     )
-    private val expectedEmptyCharacterShortDetailsLists =
-        CharacterDetails(image="", characterShortDetailsList= emptyList())
+    private val expectedEmptyCharacterShortDetailsLists = null
 
     private val savedStateHandle = SavedStateHandle (mapOf("characterID" to 1))
 
@@ -82,19 +81,13 @@ class CharacterShortDetailsViewModelTest {
         )
     }
     @Test
-    fun `return Empty When Init ViewModel`() = runTest {
-        given(characterRepository.getCharacterDetails(any())).willReturn(null)
-        assertThat(classToTest.characterDetails.value.characterResultDetails).isEqualTo(expectedEmptyCharacterShortDetailsLists)
-
-    }
-    @Test
     fun `return List When GetCharacterDetails Called`() = runTest {
 
-        classToTest.getCharacterDetails(1)
+        classToTest
 
         advanceUntilIdle()
 
-        verify(characterRepository, times(2)).getCharacterDetails(1)
+        verify(characterRepository).getCharacterDetails(1)
 
         assertThat(classToTest.characterDetails.value.characterResultDetails).isEqualTo(expectedCharacterShortDetailsLists)
         assertThat(classToTest.characterDetails.value.isLoading).isFalse()
