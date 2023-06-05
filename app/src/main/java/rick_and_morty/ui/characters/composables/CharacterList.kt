@@ -13,7 +13,6 @@ import rick_and_morty.ui.widgets.CircularProgressBar
 @Composable
 fun CharacterList(
     charactersViewModel: CharactersViewModel = viewModel(modelClass = CharactersViewModel::class.java),
-    onNavigateToCharacterDetails: (CharacterResultsDto) -> Unit
 ) {
 
     val characters = charactersViewModel.characters.collectAsState().value
@@ -32,7 +31,7 @@ fun CharacterList(
                 items(characters.characterResults) { characters ->
                     CharacterRow(
                         characterResultsDto = characters,
-                        onNavigateToCharacterDetails = { onNavigateToCharacterDetails(characters)}
+                        onNavigateToCharacterDetails = { charactersViewModel.onCharacterSelected(characters.id) }
                     )
                 }
             }

@@ -6,12 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.example.rick_and_morty.R
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import rick_and_morty.eventbus.EventBus
+import rick_and_morty.handleNavigation
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CharactersFragment : Fragment() {
+    @Inject
+    lateinit var eventBus: EventBus
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -20,12 +28,14 @@ class CharactersFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             val navController = findNavController()
             setContent {
-                CharacterList(onNavigateToCharacterDetails = {characterDetails ->
-                    val bundle = Bundle().apply {
-                        putInt("characterID", characterDetails.id)
+                CharacterList()
+            }
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    eventBus.events.collect { event ->
+                        navController.handleNavigation(event)
                     }
-                    navController.navigate(R.id.viewCharacterDetails, bundle)
-                })
+                }
             }
         }
     }

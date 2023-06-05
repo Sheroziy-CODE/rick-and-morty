@@ -6,11 +6,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import rick_and_morty.data.repository.CharacterRepository
+import rick_and_morty.eventbus.EventBus
+import rick_and_morty.eventbus.NavigateToCharacterDetails
 import javax.inject.Inject
 
 @HiltViewModel
 class CharactersViewModel @Inject constructor(
-    private val characterRepository: CharacterRepository
+    private val characterRepository: CharacterRepository,
+    private val eventBus: EventBus
 ) : ViewModel() {
 
     private var page = 1
@@ -42,6 +45,9 @@ class CharactersViewModel @Inject constructor(
                 }
             }
         }
+    }
+    fun onCharacterSelected(characterID: Int) {
+        eventBus.postEvent(NavigateToCharacterDetails(characterID))
     }
 }
 
