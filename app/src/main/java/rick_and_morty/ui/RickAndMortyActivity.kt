@@ -6,7 +6,7 @@ import com.example.rick_and_morty.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class CharactersActivity : AppCompatActivity() {
+class RickAndMortyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_character)

@@ -14,6 +14,11 @@
     </fragment>
 
     <fragment
+        android:id="@+id/EpisodeFragment"
+        android:name="rick_and_morty.ui.characters.CharactersFragment">
+    </fragment>
+
+    <fragment
         android:id="@+id/CharacterDetailsFragment"
         android:name="rick_and_morty.ui.character_details.CharacterDetailsFragment" />
 
