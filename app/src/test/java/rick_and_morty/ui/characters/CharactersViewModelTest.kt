@@ -11,6 +11,7 @@ import org.junit.Rule
 import org.junit.Test
 import rick_and_morty.data.model.*
 import rick_and_morty.data.repository.CharacterRepository
+import rick_and_morty.eventbus.EventBus
 import rick_and_morty.rules.CoroutineTestRule
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -56,7 +57,9 @@ class CharactersViewModelTest {
         onBlocking { it.getCharacters(1) } doReturn (characterResultsDto)
     }
 
-    private val classToTest by lazy { CharactersViewModel(characterRepository) }
+    private var eventBus: EventBus = mock()
+
+    private val classToTest by lazy { CharactersViewModel(characterRepository, eventBus) }
 
     @Test
     fun `return Empty List When Init ViewModel`() = runTest {

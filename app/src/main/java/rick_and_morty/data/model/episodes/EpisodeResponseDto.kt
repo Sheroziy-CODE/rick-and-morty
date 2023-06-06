@@ -8,7 +8,7 @@ import rick_and_morty.data.model.InfoDto
 @JsonClass(generateAdapter = true)
 data class EpisodeResponseDto(
     @Json(name = "info")
-    val infoDto: InfoDto,
+    val infoDto: EpisodesInfoDto,
     @Json(name = "results")
     val results: List<EpisodesResultDto>
 )
