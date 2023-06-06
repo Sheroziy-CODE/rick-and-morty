@@ -16,6 +16,10 @@
             android:id="@+id/viewEpisodesFragment"
             app:destination="@id/EpisodesFragment"
             />
+        <action
+            android:id="@+id/viewCharactersFragment"
+            app:destination="@id/CharactersFragment"
+            />
     </fragment>
 
     <fragment
@@ -26,6 +30,11 @@
             android:id="@+id/viewCharactersFragment"
             app:destination="@id/CharactersFragment"
             />
+        <action
+            android:id="@+id/viewEpisodesFragment"
+            app:destination="@id/EpisodesFragment"
+            />
+
     </fragment>
 
     <fragment
