@@ -6,16 +6,26 @@
 
     <fragment
         android:id="@+id/CharactersFragment"
-        android:name="rick_and_morty.ui.characters.CharactersFragment">
+        android:name="rick_and_morty.ui.characters.CharactersFragment"
+        app:route="CharactersFragment">
         <action
             android:id="@+id/viewCharacterDetails"
             app:destination="@id/CharacterDetailsFragment"
             />
+        <action
+            android:id="@+id/viewEpisodesFragment"
+            app:destination="@id/EpisodesFragment"
+            />
     </fragment>
 
     <fragment
-        android:id="@+id/EpisodeFragment"
-        android:name="rick_and_morty.ui.characters.CharactersFragment">
+        android:id="@+id/EpisodesFragment"
+        android:name="rick_and_morty.ui.episodes.EpisodesFragment"
+        app:route="EpisodesFragment">
+        <action
+            android:id="@+id/viewCharactersFragment"
+            app:destination="@id/CharactersFragment"
+            />
     </fragment>
 
     <fragment
