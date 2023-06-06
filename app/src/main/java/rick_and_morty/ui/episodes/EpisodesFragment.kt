@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import rick_and_morty.BottomNavigationBar
 import rick_and_morty.eventbus.EventBus
 import rick_and_morty.handleNavigation
-import rick_and_morty.ui.episodes.composables.EpisodesList
+import rick_and_morty.ui.episodes.composables.EpisodeList
 import rick_and_morty.ui.theme.RickandmortyTheme
 import javax.inject.Inject
 
@@ -42,7 +42,7 @@ class EpisodesFragment : Fragment() {
                         Scaffold(
                             bottomBar = { BottomNavigationBar(navController, eventBus) }
                         ) {
-                            EpisodesList()
+                            EpisodeList()
                         }
                     }
                 }
