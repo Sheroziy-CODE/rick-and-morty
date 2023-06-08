@@ -8,6 +8,7 @@ import androidx.navigation.fragment.NavHostFragment
 import com.example.rick_and_morty.R
 import dagger.hilt.android.AndroidEntryPoint
 import io.realm.Realm
+import io.realm.RealmConfiguration
 import kotlinx.coroutines.launch
 import rick_and_morty.eventbus.EventBus
 import rick_and_morty.handleNavigation
@@ -23,7 +24,14 @@ class RickAndMortyActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         Realm.init(this)
+        val config = RealmConfiguration.Builder()
+            .name("rickandmorty.realm")
+            .allowWritesOnUiThread(true)
+            .build()
+        Realm.setDefaultConfiguration(config)
+
         setContentView(R.layout.activity_character)
 
         setupNavController()
