@@ -5,6 +5,8 @@ plugins {
     id 'kotlin-kapt'
 }
 
+apply plugin: "realm-android"
+
 android {
     namespace 'com.example.rick_and_morty'
     compileSdk 33
