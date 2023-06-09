@@ -13,8 +13,8 @@ import androidx.compose.runtime.getValue
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import rick_and_morty.eventbus.EventBus
-import rick_and_morty.eventbus.NavigateToCharacters
-import rick_and_morty.eventbus.NavigateToEpisodes
+import rick_and_morty.eventbus.NavigateToCharactersEvent
+import rick_and_morty.eventbus.NavigateToEpisodesEvent
 
 
 @Composable
@@ -29,13 +29,13 @@ fun BottomNavigationBar(navController: NavController, eventBus: EventBus) {
             icon = { Icon(Icons.Filled.Info, contentDescription = null) },
             label = { Text("Characters") },
             selected = currentRoute == "Characters",
-            onClick = { eventBus.postEvent(NavigateToCharacters) }
+            onClick = { eventBus.postEvent(NavigateToCharactersEvent) }
         )
         BottomNavigationItem(
             icon = { Icon(Icons.Filled.Favorite, contentDescription = null) },
             label = { Text("Episodes") },
             selected = currentRoute == "Episodes",
-            onClick = { eventBus.postEvent(NavigateToEpisodes) }
+            onClick = { eventBus.postEvent(NavigateToEpisodesEvent) }
         )
     }
 }

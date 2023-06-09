@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import rick_and_morty.data.repository.CharacterRepository
 import rick_and_morty.eventbus.EventBus
-import rick_and_morty.eventbus.NavigateToCharacterDetails
+import rick_and_morty.eventbus.NavigateToCharacterDetailsEvent
 import javax.inject.Inject
 
 @HiltViewModel
@@ -47,7 +47,7 @@ class CharactersViewModel @Inject constructor(
         }
     }
     fun onCharacterSelected(characterID: Int) {
-        eventBus.postEvent(NavigateToCharacterDetails(characterID))
+        eventBus.postEvent(NavigateToCharacterDetailsEvent(characterID))
     }
 }
 
