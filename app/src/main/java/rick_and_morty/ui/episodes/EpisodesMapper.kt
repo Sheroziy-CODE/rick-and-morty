@@ -1,12 +1,12 @@
 package rick_and_morty.ui.episodes
 
 import io.realm.RealmList
-import rick_and_morty.data.model.episodes.EpisodesResultDto
+import rick_and_morty.data.model.episodes.EpisodeResultDto
 import rick_and_morty.data.model.episodes.realm.RealmEpisodes
 
 object EpisodesMapper {
 
-    fun EpisodesResultDto.toRealmEpisode(): RealmEpisodes {
+    fun EpisodeResultDto.toRealmEpisode(): RealmEpisodes {
         return RealmEpisodes(
             id = this.id,
             name = this.name,
@@ -18,8 +18,8 @@ object EpisodesMapper {
         )
     }
 
-    fun RealmEpisodes.toEpisodesResultDto(): EpisodesResultDto {
-        return EpisodesResultDto(
+    fun RealmEpisodes.toEpisodesResultDto(): EpisodeResultDto {
+        return EpisodeResultDto(
             id = this.id,
             name = this.name,
             air_date = this.air_date,

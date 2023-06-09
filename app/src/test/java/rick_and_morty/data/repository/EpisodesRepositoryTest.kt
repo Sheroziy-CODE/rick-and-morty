@@ -6,10 +6,9 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
-import rick_and_morty.data.model.InfoDto
-import rick_and_morty.data.model.episodes.EpisodeResponseDto
+import rick_and_morty.data.model.episodes.EpisodesResponseDto
 import rick_and_morty.data.model.episodes.EpisodesInfoDto
-import rick_and_morty.data.model.episodes.EpisodesResultDto
+import rick_and_morty.data.model.episodes.EpisodeResultDto
 import rick_and_morty.data.remote.RickAndMortyApiRemoteDataSource
 import rick_and_morty.data.repository.EpisodesRepository
 
@@ -29,10 +28,10 @@ class EpisodeRepositoryTest {
     @Test
     fun `verify getEpisodes has been called`() = runBlocking {
         // Mock the response from the remote data source
-        val mockResponse = EpisodeResponseDto(
+        val mockResponse = EpisodesResponseDto(
             EpisodesInfoDto(51, 3, "https://rickandmortyapi.com/api/episode?page=2", null),
             listOf(
-                EpisodesResultDto(
+                EpisodeResultDto(
                     1,
                     "Pilot",
                     "December 2, 2013",

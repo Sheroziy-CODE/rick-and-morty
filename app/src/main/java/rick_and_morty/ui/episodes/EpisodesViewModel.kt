@@ -1,6 +1,5 @@
 package rick_and_morty.ui.episodes
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -9,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import rick_and_morty.data.model.episodes.EpisodesResultDto
+import rick_and_morty.data.model.episodes.EpisodeResultDto
 import rick_and_morty.data.model.episodes.realm.RealmEpisodes
 import rick_and_morty.data.repository.EpisodesRepository
 import rick_and_morty.ui.episodes.EpisodesMapper.toEpisodesResultDto
@@ -63,7 +62,7 @@ class EpisodesViewModel @Inject constructor(
 
 
 
-    private fun saveEpisodesToDatabase(episodesList: List<EpisodesResultDto>) {
+    private fun saveEpisodesToDatabase(episodesList: List<EpisodeResultDto>) {
         realm.executeTransaction { realm ->
             val realmEpisodes = episodesList.map { it.toRealmEpisode() }
             realm.copyToRealmOrUpdate(realmEpisodes)
@@ -71,7 +70,7 @@ class EpisodesViewModel @Inject constructor(
     }
 
 
-    private fun getEpisodesFromDatabase(): List<EpisodesResultDto> {
+    private fun getEpisodesFromDatabase(): List<EpisodeResultDto> {
         val realmEpisodes = realm.where(RealmEpisodes::class.java).findAll()
         return realmEpisodes.map { it.toEpisodesResultDto() }
     }
