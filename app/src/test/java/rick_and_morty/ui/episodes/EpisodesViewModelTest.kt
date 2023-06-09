@@ -1,5 +1,7 @@
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.*
+import io.realm.Realm
+import io.realm.RealmResults
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.*
@@ -7,8 +9,10 @@ import org.junit.Rule
 import org.junit.Test
 import rick_and_morty.data.model.*
 import rick_and_morty.data.model.episodes.EpisodeResultDto
+import rick_and_morty.data.model.episodes.realm.RealmEpisodes
 import rick_and_morty.data.repository.EpisodesRepository
 import rick_and_morty.rules.CoroutineTestRule
+import rick_and_morty.ui.episodes.EpisodesMapper.toEpisodesResultDto
 import rick_and_morty.ui.episodes.EpisodesViewModel
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -30,8 +34,19 @@ class EpisodesViewModelTest {
     )
 
     private val episodesRepository: EpisodesRepository = mock()
+    private val realm: Realm = mock() // Create a mock of Realm
 
-    private val classToTest by lazy { EpisodesViewModel(episodesRepository) }
+    // Define the Realm results mock
+    private val realmResults: RealmResults<RealmEpisodes> = mock {
+        on { map { it.toEpisodesResultDto() } } doReturn mockEpisodes
+    }
+
+    // Mock the realm queries
+    init {
+        given(realm.where(RealmEpisodes::class.java).findAll()).willReturn(realmResults)
+    }
+
+    private val classToTest by lazy { EpisodesViewModel(episodesRepository, realm) }
 
     @Test
     fun `verify getEpisodes updates episodes flow with results`() = runTest {
@@ -40,6 +55,8 @@ class EpisodesViewModelTest {
         classToTest.getEpisodes()
 
         verify(episodesRepository).getEpisodes(1)
+        verify(realm).where(RealmEpisodes::class.java) // Verify that we query the realm database
+        verify(realmResults).map { it.toEpisodesResultDto() } // Verify that we convert the realm results
 
         assertThat(classToTest.episodes.value.isLoading).isFalse()
         assertThat(classToTest.episodes.value.episodeResults).isEqualTo(mockEpisodes)
