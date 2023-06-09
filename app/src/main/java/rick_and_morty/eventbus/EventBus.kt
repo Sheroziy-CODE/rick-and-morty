@@ -8,11 +8,11 @@ import javax.inject.Singleton
 @Singleton
 class EventBus @Inject constructor() {
 
-    private val bus = MutableSharedFlow<BusEvent>(extraBufferCapacity = 64)
+    private val _event = MutableSharedFlow<BusEvent>(extraBufferCapacity = 64)
 
-    val events: Flow<BusEvent> = bus
+    val events: Flow<BusEvent> = _event
 
     fun postEvent(event: BusEvent) {
-        bus.tryEmit(event)
+        _event.tryEmit(event)
     }
 }
