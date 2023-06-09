@@ -47,9 +47,9 @@ fun EpisodeList(
                                 verticalArrangement = Arrangement.spacedBy(5.dp),
                                 state = scrollListState
                         ) {
-                                items(episodes.episodeResults) { characters ->
+                                items(episodes.episodeResults) { episode ->
                                         EpisodesRow(
-                                                episodeResultsDto = characters,
+                                                episodeResultsDto = episode,
                                           )
                                 }
                         }

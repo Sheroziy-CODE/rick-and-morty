@@ -26,8 +26,7 @@ fun EpisodesRow(
         modifier = Modifier
             .fillMaxWidth()
             .height(180.dp)
-            .border(border = BorderStroke(width = 1.dp, color = Color.White))
-            .clickable (onClick = {}),
+            .border(border = BorderStroke(width = 1.dp, color = Color.White)),
         verticalArrangement = Arrangement.Center
     ) {
         Row(
