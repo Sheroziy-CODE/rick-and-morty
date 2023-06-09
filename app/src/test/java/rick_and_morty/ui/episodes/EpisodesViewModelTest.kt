@@ -34,14 +34,14 @@ class EpisodesViewModelTest {
     )
 
     private val episodesRepository: EpisodesRepository = mock()
-    private val realm: Realm = mock() // Create a mock of Realm
+    private val realm: Realm = mock()
 
-    // Define the Realm results mock
+
     private val realmResults: RealmResults<RealmEpisodes> = mock {
         on { map { it.toEpisodesResultDto() } } doReturn mockEpisodes
     }
 
-    // Mock the realm queries
+
     init {
         given(realm.where(RealmEpisodes::class.java).findAll()).willReturn(realmResults)
     }
@@ -55,8 +55,8 @@ class EpisodesViewModelTest {
         classToTest.getEpisodes()
 
         verify(episodesRepository).getEpisodes(1)
-        verify(realm).where(RealmEpisodes::class.java) // Verify that we query the realm database
-        verify(realmResults).map { it.toEpisodesResultDto() } // Verify that we convert the realm results
+        verify(realm).where(RealmEpisodes::class.java)
+        verify(realmResults).map { it.toEpisodesResultDto() }
 
         assertThat(classToTest.episodes.value.isLoading).isFalse()
         assertThat(classToTest.episodes.value.episodeResults).isEqualTo(mockEpisodes)
