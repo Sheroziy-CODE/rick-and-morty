@@ -31,10 +31,10 @@ fun CharacterList(
                 verticalArrangement = Arrangement.spacedBy(5.dp),
                 state = scrollListState
             ) {
-                items(characters.characterResults) { characters ->
+                items(characters.characterResults) { character ->
                     CharacterRow(
-                        characterResultsDto = characters,
-                        onNavigateToCharacterDetails = { charactersViewModel.onCharacterSelected(characters.id) }
+                        characterResultsDto = character,
+                        onNavigateToCharacterDetails = { charactersViewModel.onCharacterSelected(character.id) }
                     )
                 }
             }
