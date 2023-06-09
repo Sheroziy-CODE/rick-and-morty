@@ -11,6 +11,8 @@ import org.junit.Rule
 import org.junit.Test
 import rick_and_morty.data.model.*
 import rick_and_morty.data.repository.CharacterRepository
+import rick_and_morty.eventbus.EventBus
+import rick_and_morty.eventbus.NavigateToCharacterDetailsEvent
 import rick_and_morty.rules.CoroutineTestRule
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -56,7 +58,9 @@ class CharactersViewModelTest {
         onBlocking { it.getCharacters(1) } doReturn (characterResultsDto)
     }
 
-    private val classToTest by lazy { CharactersViewModel(characterRepository) }
+    private var eventBus: EventBus = mock()
+
+    private val classToTest by lazy { CharactersViewModel(characterRepository, eventBus) }
 
     @Test
     fun `return Empty List When Init ViewModel`() = runTest {
@@ -75,6 +79,20 @@ class CharactersViewModelTest {
         assertThat(classToTest.characters.value.isLoading).isFalse()
         assertThat(classToTest.characters.value.failure).isNull()
     }
+
+    @Test
+    fun `post NavigateToCharacterDetailsEvent when onCharacterSelected is called`() = runTest {
+        val characterID = 1
+        val eventCaptor = argumentCaptor<NavigateToCharacterDetailsEvent>()
+        doNothing().`when`(eventBus).postEvent(eventCaptor.capture())
+
+        classToTest.onCharacterSelected(characterID)
+
+        val postedEvent = eventCaptor.firstValue
+        assertThat(postedEvent.characterId).isEqualTo(characterID)
+        assertThat(postedEvent).isInstanceOf(NavigateToCharacterDetailsEvent::class.java)
+    }
+
 
     @Test
     fun `catch An Error`() = runTest {
