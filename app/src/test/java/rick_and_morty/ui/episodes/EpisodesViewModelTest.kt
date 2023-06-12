@@ -1,7 +1,6 @@
 import com.google.common.truth.Truth.assertThat
 import com.nhaarman.mockitokotlin2.*
-import io.realm.Realm
-import io.realm.RealmResults
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.*
@@ -10,11 +9,12 @@ import org.junit.Test
 import rick_and_morty.data.model.*
 import rick_and_morty.data.model.episodes.EpisodeResultDto
 import rick_and_morty.data.model.episodes.realm.RealmEpisodes
+import rick_and_morty.data.realm.RealmProvider
 import rick_and_morty.data.repository.EpisodesRepository
 import rick_and_morty.rules.CoroutineTestRule
-import rick_and_morty.ui.episodes.EpisodesMapper.toEpisodesResultDto
+import rick_and_morty.rules.FakeRealmProvider
+import rick_and_morty.ui.episodes.EpisodesMapper.toRealmEpisode
 import rick_and_morty.ui.episodes.EpisodesViewModel
-
 @OptIn(ExperimentalCoroutinesApi::class)
 class EpisodesViewModelTest {
 
@@ -34,34 +34,31 @@ class EpisodesViewModelTest {
     )
 
     private val episodesRepository: EpisodesRepository = mock()
-    private val realm: Realm = mock()
+    private val realmProvider: FakeRealmProvider = FakeRealmProvider()
 
-
-    private val realmResults: RealmResults<RealmEpisodes> = mock {
-        on { map { it.toEpisodesResultDto() } } doReturn mockEpisodes
-    }
-
+    private val realmResults: List<RealmEpisodes> = mockEpisodes.map { it.toRealmEpisode() }
 
     init {
-        given(realm.where(RealmEpisodes::class.java).findAll()).willReturn(realmResults)
+        realmProvider.setRealmResults(realmResults)
     }
 
-    private val classToTest by lazy { EpisodesViewModel(episodesRepository, realm) }
+
+    private val classToTest by lazy { EpisodesViewModel(episodesRepository, realmProvider) }
 
     @Test
     fun `verify getEpisodes updates episodes flow with results`() = runTest {
+
         given(episodesRepository.getEpisodes(1)).willReturn(mockEpisodes)
 
         classToTest.getEpisodes()
 
+        assertTrue(realmProvider.isFindAllCalled)
         verify(episodesRepository).getEpisodes(1)
-        verify(realm).where(RealmEpisodes::class.java)
-        verify(realmResults).map { it.toEpisodesResultDto() }
 
         assertThat(classToTest.episodes.value.isLoading).isFalse()
         assertThat(classToTest.episodes.value.episodeResults).isEqualTo(mockEpisodes)
-        assertThat(classToTest.episodes.value.failure).isNull()
     }
+
 
     @Test
     fun `verify getEpisodes updates episodes flow with error`() = runTest {

@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import rick_and_morty.data.model.episodes.EpisodeResultDto
 import rick_and_morty.data.model.episodes.realm.RealmEpisodes
+import rick_and_morty.data.realm.RealmProvider
 import rick_and_morty.data.repository.EpisodesRepository
 import rick_and_morty.ui.episodes.EpisodesMapper.toEpisodesResultDto
 import rick_and_morty.ui.episodes.EpisodesMapper.toRealmEpisode
@@ -18,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EpisodesViewModel @Inject constructor(
     private val episodesRepository: EpisodesRepository,
-    private val realm: Realm, // Inject an instance of Realm
+    private val realmProvider: RealmProvider,
 ) : ViewModel() {
 
     private var page = 1
@@ -60,23 +61,12 @@ class EpisodesViewModel @Inject constructor(
         }
     }
 
-
-
     private fun saveEpisodesToDatabase(episodesList: List<EpisodeResultDto>) {
-        realm.executeTransaction { realm ->
-            val realmEpisodes = episodesList.map { it.toRealmEpisode() }
-            realm.copyToRealmOrUpdate(realmEpisodes)
-        }
+        realmProvider.saveEpisodesToDatabase(episodesList)
     }
-
 
     private fun getEpisodesFromDatabase(): List<EpisodeResultDto> {
-        val realmEpisodes = realm.where(RealmEpisodes::class.java).findAll()
+        val realmEpisodes = realmProvider.findAll(RealmEpisodes::class.java)
         return realmEpisodes.map { it.toEpisodesResultDto() }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        realm.close()
     }
 }
