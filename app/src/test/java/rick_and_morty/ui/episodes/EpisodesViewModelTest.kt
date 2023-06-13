@@ -4,6 +4,7 @@ import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.*
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import rick_and_morty.data.model.*
@@ -38,7 +39,8 @@ class EpisodesViewModelTest {
 
     private val realmResults: List<RealmEpisodes> = mockEpisodes.map { it.toRealmEpisode() }
 
-    init {
+    @Before
+    fun setup() {
         realmProvider.setRealmResults(realmResults)
     }
 
