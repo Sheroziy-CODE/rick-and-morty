@@ -3,10 +3,10 @@ package rick_and_morty.rules
 import io.realm.RealmObject
 import rick_and_morty.data.model.episodes.EpisodeResultDto
 import rick_and_morty.data.model.episodes.realm.RealmEpisodes
-import rick_and_morty.data.realm.RealmProvider
+import rick_and_morty.data.realm.RealmInstance
 import rick_and_morty.ui.episodes.EpisodesMapper.toRealmEpisode
 
-class FakeRealmProvider : RealmProvider {
+class FakeRealmProvider : RealmInstance {
 
     private val fakeDatabase = mutableListOf<RealmEpisodes>()
 

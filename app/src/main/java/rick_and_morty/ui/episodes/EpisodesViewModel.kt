@@ -3,23 +3,21 @@ package rick_and_morty.ui.episodes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.realm.Realm
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import rick_and_morty.data.model.episodes.EpisodeResultDto
 import rick_and_morty.data.model.episodes.realm.RealmEpisodes
-import rick_and_morty.data.realm.RealmProvider
+import rick_and_morty.data.realm.RealmInstance
 import rick_and_morty.data.repository.EpisodesRepository
 import rick_and_morty.ui.episodes.EpisodesMapper.toEpisodesResultDto
-import rick_and_morty.ui.episodes.EpisodesMapper.toRealmEpisode
 import javax.inject.Inject
 
 @HiltViewModel
 class EpisodesViewModel @Inject constructor(
     private val episodesRepository: EpisodesRepository,
-    private val realmProvider: RealmProvider,
+    private val realmInstance: RealmInstance,
 ) : ViewModel() {
 
     private var page = 1
@@ -62,11 +60,11 @@ class EpisodesViewModel @Inject constructor(
     }
 
     private fun saveEpisodesToDatabase(episodesList: List<EpisodeResultDto>) {
-        realmProvider.saveEpisodesToDatabase(episodesList)
+        realmInstance.saveEpisodesToDatabase(episodesList)
     }
 
     private fun getEpisodesFromDatabase(): List<EpisodeResultDto> {
-        val realmEpisodes = realmProvider.findAll(RealmEpisodes::class.java)
+        val realmEpisodes = realmInstance.findAll(RealmEpisodes::class.java)
         return realmEpisodes.map { it.toEpisodesResultDto() }
     }
 }

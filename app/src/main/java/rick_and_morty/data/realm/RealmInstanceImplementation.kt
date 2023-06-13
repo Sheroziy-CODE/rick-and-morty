@@ -5,7 +5,7 @@ import io.realm.RealmObject
 import rick_and_morty.data.model.episodes.EpisodeResultDto
 import rick_and_morty.ui.episodes.EpisodesMapper.toRealmEpisode
 
-class RealRealmProvider(private val realm: Realm) : RealmProvider {
+class RealmInstanceImplementation(private val realm: Realm) : RealmInstance {
 
     override fun <T : RealmObject> findAll(clazz: Class<T>): List<T> {
         return realm.where(clazz).findAll()

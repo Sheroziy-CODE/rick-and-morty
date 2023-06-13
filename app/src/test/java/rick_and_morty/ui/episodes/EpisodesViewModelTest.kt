@@ -10,7 +10,6 @@ import org.junit.Test
 import rick_and_morty.data.model.*
 import rick_and_morty.data.model.episodes.EpisodeResultDto
 import rick_and_morty.data.model.episodes.realm.RealmEpisodes
-import rick_and_morty.data.realm.RealmProvider
 import rick_and_morty.data.repository.EpisodesRepository
 import rick_and_morty.rules.CoroutineTestRule
 import rick_and_morty.rules.FakeRealmProvider
