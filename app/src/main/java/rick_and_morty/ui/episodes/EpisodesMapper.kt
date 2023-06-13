@@ -10,7 +10,7 @@ object EpisodesMapper {
         return RealmEpisodes(
             id = this.id,
             name = this.name,
-            air_date = this.air_date,
+            airDate = this.airDate,
             episode = this.episode,
             characters = RealmList<String>().apply { addAll(this@toRealmEpisode.characters) },
             url = this.url,
@@ -22,7 +22,7 @@ object EpisodesMapper {
         return EpisodeResultDto(
             id = this.id,
             name = this.name,
-            air_date = this.air_date,
+            airDate = this.airDate,
             episode = this.episode,
             characters = this.characters,
             url = this.url,

@@ -2,7 +2,6 @@ package rick_and_morty.ui.episodes.composables
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -47,7 +46,7 @@ fun EpisodesRow(
                     color = Color.White)
                 Spacer(modifier = Modifier.padding(top = 10.dp))
                 Text (
-                    text = "Air Date: \n${episodeResultsDto.air_date}",
+                    text = "Air Date: \n${episodeResultsDto.airDate}",
                     fontSize = 15.sp,
                     color = Color.White)
             }

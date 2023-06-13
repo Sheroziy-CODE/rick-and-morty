@@ -55,7 +55,7 @@ class EpisodeRepositoryTest {
         assertEquals(1, result.size)
         assertEquals(1, result[0].id)
         assertEquals("Pilot", result[0].name)
-        assertEquals("December 2, 2013", result[0].air_date)
+        assertEquals("December 2, 2013", result[0].airDate)
         assertEquals("S01E01", result[0].episode)
         assertEquals(2, result[0].characters.size)
         assertEquals("https://rickandmortyapi.com/api/character/1", result[0].characters[0])
