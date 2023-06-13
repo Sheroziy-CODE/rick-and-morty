@@ -3,9 +3,9 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'dagger.hilt.android.plugin'
     id 'kotlin-kapt'
+    id 'realm-android'
 }
 
-apply plugin: "realm-android"
 
 android {
     namespace 'com.example.rick_and_morty'
