@@ -16,8 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EpisodesViewModel @Inject constructor(
-    private val episodesRepository: EpisodesRepository,
-    private val realmInstance: RealmInstance,
+    private val episodesRepository: EpisodesRepository
 ) : ViewModel() {
 
     private var page = 1
@@ -34,9 +33,9 @@ class EpisodesViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 var dbEpisodes = episodesRepository.getEpisodesFromDatabase()
-                if (dbEpisodes.isEmpty() || dbEpisodes.size < page * 20) {
+                if (dbEpisodes.size < page * 20) {
                     val apiEpisodes = episodesRepository.getEpisodes(page)
-                    saveEpisodesToDatabase(apiEpisodes)
+                    episodesRepository.saveEpisodesToDatabase(apiEpisodes)
                     dbEpisodes = episodesRepository.getEpisodesFromDatabase()
                     page += 1
                 }
@@ -53,9 +52,5 @@ class EpisodesViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    private fun saveEpisodesToDatabase(episodesList: List<EpisodeResultDto>) {
-        realmInstance.saveEpisodesToDatabase(episodesList)
     }
 }

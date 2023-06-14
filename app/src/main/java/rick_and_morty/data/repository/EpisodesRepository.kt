@@ -19,5 +19,9 @@ class EpisodesRepository @Inject constructor(
         val realmEpisodes = realmInstance.findAll(RealmEpisodes::class.java)
         return realmEpisodes.map { it.toEpisodesResultDto() }
     }
+
+    fun saveEpisodesToDatabase(episodesList: List<EpisodeResultDto>) {
+        realmInstance.saveEpisodesToDatabase(episodesList)
+    }
 }
 

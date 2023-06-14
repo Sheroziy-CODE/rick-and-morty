@@ -35,9 +35,6 @@ class EpisodesViewModelTest {
     )
 
     private val episodesRepository: EpisodesRepository = mock()
-
-    private val realmInstance: RealmInstance = mock()
-
     @Before
     fun setup() {
         runBlocking {
@@ -45,7 +42,7 @@ class EpisodesViewModelTest {
         }
     }
 
-    private val classToTest by lazy { EpisodesViewModel(episodesRepository, realmInstance) }
+    private val classToTest by lazy { EpisodesViewModel(episodesRepository) }
 
     @Test
     fun `verify getEpisodes updates episodes flow with results`() = runBlocking {
