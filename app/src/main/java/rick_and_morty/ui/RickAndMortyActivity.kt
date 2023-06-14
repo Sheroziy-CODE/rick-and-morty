@@ -25,13 +25,6 @@ class RickAndMortyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Realm.init(this)
-        val config = RealmConfiguration.Builder()
-            .name("rickandmorty.realm")
-            .allowWritesOnUiThread(true)
-            .build()
-        Realm.setDefaultConfiguration(config)
-
         setContentView(R.layout.activity_character)
 
         setupNavController()

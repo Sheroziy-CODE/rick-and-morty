@@ -1,10 +1,14 @@
 package rick_and_morty.di
 
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import io.realm.Realm
+import io.realm.RealmConfiguration
 import rick_and_morty.data.realm.RealmInstanceImplementation
 import rick_and_morty.data.realm.RealmInstance
 import javax.inject.Singleton
@@ -15,7 +19,14 @@ object RealmModule {
 
     @Provides
     @Singleton
-    fun provideRealm(): Realm {
+    fun provideRealm(@ApplicationContext context: Context): Realm {
+        Realm.init(context)
+        val config = RealmConfiguration.Builder()
+            .name("rickandmorty.realm")
+            .allowWritesOnUiThread(true)
+            .build()
+        Realm.setDefaultConfiguration(config)
+
         return Realm.getDefaultInstance()
     }
 
@@ -24,5 +35,6 @@ object RealmModule {
     fun provideRealmProvider(realm: Realm): RealmInstance {
         return RealmInstanceImplementation(realm)
     }
+
 }
 
