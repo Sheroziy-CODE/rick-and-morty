@@ -34,17 +34,13 @@ class EpisodesViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 var dbEpisodes = getEpisodesFromDatabase()
-                if (dbEpisodes.isEmpty()) {
-                    val apiEpisodes = episodesRepository.getEpisodes(page)
-                    saveEpisodesToDatabase(apiEpisodes)
-                    dbEpisodes = getEpisodesFromDatabase()
-                    page += 1
-                } else if (dbEpisodes.size < page * 20) {
+                if (dbEpisodes.isEmpty() || dbEpisodes.size < page * 20) {
                     val apiEpisodes = episodesRepository.getEpisodes(page)
                     saveEpisodesToDatabase(apiEpisodes)
                     dbEpisodes = getEpisodesFromDatabase()
                     page += 1
                 }
+
                 _episodes.update {
                     it.copy(
                         isLoading = false,
