@@ -10,6 +10,7 @@ import org.junit.Test
 import rick_and_morty.data.model.*
 import rick_and_morty.data.model.episodes.EpisodeResultDto
 import rick_and_morty.data.model.episodes.realm.RealmEpisodes
+import rick_and_morty.data.realm.RealmInstance
 import rick_and_morty.data.repository.EpisodesRepository
 import rick_and_morty.rules.CoroutineTestRule
 import rick_and_morty.rules.FakeRealmInstance
@@ -34,26 +35,24 @@ class EpisodesViewModelTest {
     )
 
     private val episodesRepository: EpisodesRepository = mock()
-    private val realmProvider: FakeRealmInstance = FakeRealmInstance()
 
-    private val realmResults: List<RealmEpisodes> = mockEpisodes.map { it.toRealmEpisode() }
+    private val realmInstance: RealmInstance = mock()
 
     @Before
     fun setup() {
-        realmProvider.setRealmResults(realmResults)
+        runBlocking {
+            whenever(episodesRepository.getEpisodesFromDatabase()).thenReturn(mockEpisodes)
+        }
     }
 
-
-    private val classToTest by lazy { EpisodesViewModel(episodesRepository, realmProvider) }
+    private val classToTest by lazy { EpisodesViewModel(episodesRepository, realmInstance) }
 
     @Test
-    fun `verify getEpisodes updates episodes flow with results`() = runTest {
-
-        given(episodesRepository.getEpisodes(1)).willReturn(mockEpisodes)
+    fun `verify getEpisodes updates episodes flow with results`() = runBlocking {
+        whenever(episodesRepository.getEpisodes(1)).thenReturn(mockEpisodes)
 
         classToTest.getEpisodes()
 
-        assertTrue(realmProvider.isFindAllCalled)
         verify(episodesRepository).getEpisodes(1)
 
         assertThat(classToTest.episodes.value.isLoading).isFalse()
@@ -64,7 +63,7 @@ class EpisodesViewModelTest {
     @Test
     fun `verify getEpisodes updates episodes flow with error`() = runTest {
         val errorMessage = "Failed to fetch episodes"
-        given(episodesRepository.getEpisodes(1)).willThrow(RuntimeException(errorMessage))
+        whenever(episodesRepository.getEpisodes(1)).thenThrow(RuntimeException(errorMessage))
 
         classToTest.getEpisodes()
 

@@ -33,11 +33,11 @@ class EpisodesViewModel @Inject constructor(
         _episodes.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             try {
-                var dbEpisodes = getEpisodesFromDatabase()
+                var dbEpisodes = episodesRepository.getEpisodesFromDatabase()
                 if (dbEpisodes.isEmpty() || dbEpisodes.size < page * 20) {
                     val apiEpisodes = episodesRepository.getEpisodes(page)
                     saveEpisodesToDatabase(apiEpisodes)
-                    dbEpisodes = getEpisodesFromDatabase()
+                    dbEpisodes = episodesRepository.getEpisodesFromDatabase()
                     page += 1
                 }
 
@@ -57,10 +57,5 @@ class EpisodesViewModel @Inject constructor(
 
     private fun saveEpisodesToDatabase(episodesList: List<EpisodeResultDto>) {
         realmInstance.saveEpisodesToDatabase(episodesList)
-    }
-
-    private fun getEpisodesFromDatabase(): List<EpisodeResultDto> {
-        val realmEpisodes = realmInstance.findAll(RealmEpisodes::class.java)
-        return realmEpisodes.map { it.toEpisodesResultDto() }
     }
 }
