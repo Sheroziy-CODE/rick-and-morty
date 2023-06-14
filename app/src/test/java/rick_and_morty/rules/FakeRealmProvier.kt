@@ -6,7 +6,7 @@ import rick_and_morty.data.model.episodes.realm.RealmEpisodes
 import rick_and_morty.data.realm.RealmInstance
 import rick_and_morty.ui.episodes.EpisodesMapper.toRealmEpisode
 
-class FakeRealmProvider : RealmInstance {
+class FakeRealmInstance : RealmInstance {
 
     private val fakeDatabase = mutableListOf<RealmEpisodes>()
 

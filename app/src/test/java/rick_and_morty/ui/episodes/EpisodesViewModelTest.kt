@@ -12,7 +12,7 @@ import rick_and_morty.data.model.episodes.EpisodeResultDto
 import rick_and_morty.data.model.episodes.realm.RealmEpisodes
 import rick_and_morty.data.repository.EpisodesRepository
 import rick_and_morty.rules.CoroutineTestRule
-import rick_and_morty.rules.FakeRealmProvider
+import rick_and_morty.rules.FakeRealmInstance
 import rick_and_morty.ui.episodes.EpisodesMapper.toRealmEpisode
 import rick_and_morty.ui.episodes.EpisodesViewModel
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -34,7 +34,7 @@ class EpisodesViewModelTest {
     )
 
     private val episodesRepository: EpisodesRepository = mock()
-    private val realmProvider: FakeRealmProvider = FakeRealmProvider()
+    private val realmProvider: FakeRealmInstance = FakeRealmInstance()
 
     private val realmResults: List<RealmEpisodes> = mockEpisodes.map { it.toRealmEpisode() }
 
