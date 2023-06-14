@@ -8,25 +8,25 @@ object EpisodesMapper {
 
     fun EpisodeResultDto.toRealmEpisode(): RealmEpisodes {
         return RealmEpisodes(
-            id = this.id,
-            name = this.name,
-            airDate = this.airDate,
-            episode = this.episode,
+            id = id,
+            name = name,
+            airDate = airDate,
+            episode = episode,
             characters = RealmList<String>().apply { addAll(this@toRealmEpisode.characters) },
-            url = this.url,
-            created = this.created
+            url = url,
+            created = created
         )
     }
 
     fun RealmEpisodes.toEpisodesResultDto(): EpisodeResultDto {
         return EpisodeResultDto(
-            id = this.id,
-            name = this.name,
-            airDate = this.airDate,
-            episode = this.episode,
-            characters = this.characters,
-            url = this.url,
-            created = this.created
+            id = id,
+            name = name,
+            airDate = airDate,
+            episode = episode,
+            characters = characters,
+            url = url,
+            created = created
         )
     }
 }
