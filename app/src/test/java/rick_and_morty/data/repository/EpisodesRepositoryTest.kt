@@ -1,5 +1,6 @@
 import com.nhaarman.mockitokotlin2.given
 import com.nhaarman.mockitokotlin2.verify
+import io.realm.RealmList
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -9,25 +10,31 @@ import org.mockito.MockitoAnnotations
 import rick_and_morty.data.model.episodes.EpisodesResponseDto
 import rick_and_morty.data.model.episodes.EpisodesInfoDto
 import rick_and_morty.data.model.episodes.EpisodeResultDto
+import rick_and_morty.data.model.episodes.realm.RealmEpisodes
+import rick_and_morty.data.realm.RealmInstance
 import rick_and_morty.data.remote.RickAndMortyApiRemoteDataSource
 import rick_and_morty.data.repository.EpisodesRepository
+
 
 class EpisodeRepositoryTest {
 
     @Mock
     private lateinit var mockApiRemoteDataSource: RickAndMortyApiRemoteDataSource
 
+    @Mock
+    private lateinit var realmInstance: RealmInstance
+
     private lateinit var episodeRepository: EpisodesRepository
 
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        episodeRepository = EpisodesRepository(mockApiRemoteDataSource)
+        episodeRepository = EpisodesRepository(mockApiRemoteDataSource, realmInstance)
     }
 
     @Test
-    fun `verify getEpisodes has been called`() = runBlocking {
-        // Mock the response from the remote data source
+    fun `verify Get Episodes has been called`(): Unit = runBlocking {
+
         val mockResponse = EpisodesResponseDto(
             EpisodesInfoDto(51, 3, "https://rickandmortyapi.com/api/episode?page=2", null),
             listOf(
@@ -44,18 +51,38 @@ class EpisodeRepositoryTest {
         )
         given(mockApiRemoteDataSource.fetchRickAndMortyEpisodesData(1)).willReturn(mockResponse)
 
-        // Call the repository method
+
         episodeRepository.getEpisodes(1)
 
-        // Verify the method call
-        verify(mockApiRemoteDataSource).fetchRickAndMortyEpisodesData(1)
 
-        // Get the result and assert
-        val result = episodeRepository.getEpisodes(1)
+        verify(mockApiRemoteDataSource).fetchRickAndMortyEpisodesData(1)
+    }
+
+    @Test
+    fun `verify getEpisodesFromDatabase has been called`() = runBlocking {
+
+        val mockRealmEpisode = RealmEpisodes().apply {
+            id = 1
+            name = "Pilot"
+            airDate = "December 2, 2013"
+            episode = "S01E01"
+            characters = RealmList("https://rickandmortyapi.com/api/character/1", "https://rickandmortyapi.com/api/character/2")
+            url = "https://rickandmortyapi.com/api/episode/1"
+            created = "2017-11-10T12:56:33.798Z"
+        }
+        given(realmInstance.findAll(RealmEpisodes::class.java)).willReturn(listOf(mockRealmEpisode))
+
+
+        val result = episodeRepository.getEpisodesFromDatabase()
+
+
+        verify(realmInstance).findAll(RealmEpisodes::class.java)
+
+
         assertEquals(1, result.size)
         assertEquals(1, result[0].id)
         assertEquals("Pilot", result[0].name)
-        assertEquals("December 2, 2013", result[0].air_date)
+        assertEquals("December 2, 2013", result[0].airDate)
         assertEquals("S01E01", result[0].episode)
         assertEquals(2, result[0].characters.size)
         assertEquals("https://rickandmortyapi.com/api/character/1", result[0].characters[0])
@@ -64,4 +91,10 @@ class EpisodeRepositoryTest {
         assertEquals("2017-11-10T12:56:33.798Z", result[0].created)
     }
 }
+
+
+
+
+
+
 

@@ -7,12 +7,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import rick_and_morty.data.model.episodes.EpisodeResultDto
+import rick_and_morty.data.model.episodes.realm.RealmEpisodes
+import rick_and_morty.data.realm.RealmInstance
 import rick_and_morty.data.repository.EpisodesRepository
+import rick_and_morty.ui.episodes.EpisodesMapper.toEpisodesResultDto
 import javax.inject.Inject
 
 @HiltViewModel
 class EpisodesViewModel @Inject constructor(
-    private val episodesRepository: EpisodesRepository,
+    private val episodesRepository: EpisodesRepository
 ) : ViewModel() {
 
     private var page = 1
@@ -28,16 +32,20 @@ class EpisodesViewModel @Inject constructor(
         _episodes.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             try {
-                val getEpisodes = episodesRepository.getEpisodes(page)
+                var dbEpisodes = episodesRepository.getEpisodesFromDatabase()
+                if (dbEpisodes.size < page * 20) {
+                    val apiEpisodes = episodesRepository.getEpisodes(page)
+                    episodesRepository.saveEpisodesToDatabase(apiEpisodes)
+                    dbEpisodes = episodesRepository.getEpisodesFromDatabase()
+                    page += 1
+                }
+
                 _episodes.update {
                     it.copy(
                         isLoading = false,
-                        episodeResults = if (getEpisodes != null)
-                            it.episodeResults + getEpisodes
-                        else it.episodeResults
+                        episodeResults = dbEpisodes
                     )
                 }
-                page += 1
             } catch (error: Exception) {
                 _episodes.update {
                     it.copy(isLoading = false, failure = error)
