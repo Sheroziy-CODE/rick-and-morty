@@ -15,6 +15,9 @@ class EpisodesRepository @Inject constructor(
     suspend fun getEpisodes(page: Int) =
         rickAndMortyApiRemoteDataSource.fetchRickAndMortyEpisodesData(page).results
 
+    suspend fun getEpisodesInfo(page: Int) =
+        rickAndMortyApiRemoteDataSource.fetchRickAndMortyEpisodesData(page).infoDto
+
     fun getEpisodesFromDatabase(): List<EpisodeResultDto> {
         val realmEpisodes = realmInstance.findAll(RealmEpisodes::class.java)
         return realmEpisodes.map { it.toEpisodesResultDto() }
@@ -23,5 +26,10 @@ class EpisodesRepository @Inject constructor(
     fun saveEpisodesToDatabase(episodesList: List<EpisodeResultDto>) {
         realmInstance.saveEpisodesToDatabase(episodesList)
     }
+
+    fun clearEpisodesDatabase() {
+        realmInstance.clearEpisodesDatabase()
+    }
+
 }
 

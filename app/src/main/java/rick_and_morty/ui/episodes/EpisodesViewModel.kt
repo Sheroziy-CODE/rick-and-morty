@@ -33,12 +33,41 @@ class EpisodesViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 var dbEpisodes = episodesRepository.getEpisodesFromDatabase()
+                val apiEpisodesInfo = episodesRepository.getEpisodesInfo(page)
+
                 if (dbEpisodes.size < page * 20) {
                     val apiEpisodes = episodesRepository.getEpisodes(page)
                     episodesRepository.saveEpisodesToDatabase(apiEpisodes)
                     dbEpisodes = episodesRepository.getEpisodesFromDatabase()
+                }
+
+                _episodes.update {
+                    it.copy(
+                        isLoading = false,
+                        episodeResults = dbEpisodes
+                    )
+                }
+                if (apiEpisodesInfo.next != null){
                     page += 1
                 }
+            } catch (error: Exception) {
+                _episodes.update {
+                    it.copy(isLoading = false, failure = error)
+                }
+            }
+        }
+    }
+
+    fun refreshEpisodes() {
+        viewModelScope.launch {
+            try {
+                _episodes.update { it.copy(isLoading = true) }
+
+
+                episodesRepository.clearEpisodesDatabase()
+                page = 1
+                val dbEpisodes = episodesRepository.getEpisodes(page)
+                episodesRepository.saveEpisodesToDatabase(dbEpisodes)
 
                 _episodes.update {
                     it.copy(
