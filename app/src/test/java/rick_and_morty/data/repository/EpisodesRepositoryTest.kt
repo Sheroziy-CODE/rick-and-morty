@@ -32,23 +32,24 @@ class EpisodeRepositoryTest {
         episodeRepository = EpisodesRepository(mockApiRemoteDataSource, realmInstance)
     }
 
+    private val mockResponse = EpisodesResponseDto(
+        EpisodesInfoDto(51, 3, "https://rickandmortyapi.com/api/episode?page=2", null),
+        listOf(
+            EpisodeResultDto(
+                1,
+                "Pilot",
+                "December 2, 2013",
+                "S01E01",
+                listOf("https://rickandmortyapi.com/api/character/1", "https://rickandmortyapi.com/api/character/2"),
+                "https://rickandmortyapi.com/api/episode/1",
+                "2017-11-10T12:56:33.798Z"
+            )
+        )
+    )
+
     @Test
     fun `verify Get Episodes has been called`(): Unit = runBlocking {
 
-        val mockResponse = EpisodesResponseDto(
-            EpisodesInfoDto(51, 3, "https://rickandmortyapi.com/api/episode?page=2", null),
-            listOf(
-                EpisodeResultDto(
-                    1,
-                    "Pilot",
-                    "December 2, 2013",
-                    "S01E01",
-                    listOf("https://rickandmortyapi.com/api/character/1", "https://rickandmortyapi.com/api/character/2"),
-                    "https://rickandmortyapi.com/api/episode/1",
-                    "2017-11-10T12:56:33.798Z"
-                )
-            )
-        )
         given(mockApiRemoteDataSource.fetchRickAndMortyEpisodesData(1)).willReturn(mockResponse)
 
 
@@ -90,6 +91,17 @@ class EpisodeRepositoryTest {
         assertEquals("https://rickandmortyapi.com/api/episode/1", result[0].url)
         assertEquals("2017-11-10T12:56:33.798Z", result[0].created)
     }
+
+    @Test
+    fun `verify Get Episodes Info has been called`(): Unit = runBlocking {
+
+        given(mockApiRemoteDataSource.fetchRickAndMortyEpisodesData(1)).willReturn(mockResponse)
+
+        episodeRepository.getEpisodesInfo(1)
+
+        verify(mockApiRemoteDataSource).fetchRickAndMortyEpisodesData(1)
+    }
+
 }
 
 

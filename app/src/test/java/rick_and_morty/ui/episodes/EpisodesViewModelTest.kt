@@ -50,7 +50,7 @@ class EpisodesViewModelTest {
 
         classToTest.getEpisodes()
 
-        verify(episodesRepository).getEpisodes(1)
+        verify(episodesRepository, atLeast(1)).getEpisodes(1)
 
         assertThat(classToTest.episodes.value.isLoading).isFalse()
         assertThat(classToTest.episodes.value.episodeResults).isEqualTo(mockEpisodes)
@@ -69,4 +69,33 @@ class EpisodesViewModelTest {
         assertThat(classToTest.episodes.value.failure).isInstanceOf(RuntimeException::class.java)
         assertThat(classToTest.episodes.value.failure?.message).isEqualTo(errorMessage)
     }
+
+    @Test
+    fun `verify refreshEpisodes clears database and fetches episodes again`() = runBlockingTest {
+        whenever(episodesRepository.getEpisodes(1)).thenReturn(mockEpisodes)
+
+        classToTest.refreshEpisodes()
+
+
+        verify(episodesRepository).clearEpisodesDatabase()
+        verify(episodesRepository, times(2)).getEpisodes(1)
+        verify(episodesRepository, times(2)).saveEpisodesToDatabase(mockEpisodes)
+
+        assertThat(classToTest.episodes.value.isLoading).isFalse()
+        assertThat(classToTest.episodes.value.episodeResults).isEqualTo(mockEpisodes)
+    }
+
+    @Test
+    fun `verify refreshEpisodes updates episodes flow with error`() = runTest {
+        val errorMessage = "Failed to refresh episodes"
+        whenever(episodesRepository.getEpisodes(1)).thenThrow(RuntimeException(errorMessage))
+
+        classToTest.refreshEpisodes()
+
+        assertThat(classToTest.episodes.value.isLoading).isFalse()
+        assertThat(classToTest.episodes.value.episodeResults).isEmpty()
+        assertThat(classToTest.episodes.value.failure).isInstanceOf(RuntimeException::class.java)
+        assertThat(classToTest.episodes.value.failure?.message).isEqualTo(errorMessage)
+    }
+
 }
