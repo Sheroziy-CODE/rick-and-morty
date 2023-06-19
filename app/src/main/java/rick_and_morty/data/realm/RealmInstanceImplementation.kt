@@ -2,8 +2,11 @@ package rick_and_morty.data.realm
 
 import io.realm.Realm
 import io.realm.RealmObject
+import rick_and_morty.data.model.CharacterResultsDto
+import rick_and_morty.data.model.RealmCharacters
 import rick_and_morty.data.model.episodes.EpisodeResultDto
 import rick_and_morty.data.model.episodes.realm.RealmEpisodes
+import rick_and_morty.ui.characters.CharactersMapper.toRealmCharacter
 import rick_and_morty.ui.episodes.EpisodesMapper.toRealmEpisode
 
 class RealmInstanceImplementation(private val realm: Realm) : RealmInstance {
@@ -22,6 +25,19 @@ class RealmInstanceImplementation(private val realm: Realm) : RealmInstance {
     override fun clearEpisodesDatabase() {
         realm.executeTransaction { realm ->
             realm.delete(RealmEpisodes::class.java)
+        }
+    }
+
+    override fun saveCharactersToDatabase(charactersList: List<CharacterResultsDto>) {
+        realm.executeTransaction { realm ->
+            val realmCharacters = charactersList.map { it.toRealmCharacter() }
+            realm.copyToRealmOrUpdate(realmCharacters)
+        }
+    }
+
+    override fun clearCharactersDatabase() {
+        realm.executeTransaction { realm ->
+            realm.delete(RealmCharacters::class.java)
         }
     }
 

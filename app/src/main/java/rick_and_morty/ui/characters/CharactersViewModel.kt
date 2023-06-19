@@ -29,16 +29,26 @@ class CharactersViewModel @Inject constructor(
         _characters.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             try {
-                val getCharacter = characterRepository.getCharacters(page)
+                var dbCharacters = characterRepository.getCharactersFromDatabase()
+                val apiCharactersInfo = characterRepository.getCharactersInfo(page)
+
+                if (dbCharacters.size < page * 20) {
+                    val apiCharacters = characterRepository.getCharacters(page)
+                    characterRepository.saveCharactersToDatabase(apiCharacters)
+                    dbCharacters = characterRepository.getCharactersFromDatabase()
+                }
+
                 _characters.update {
                     it.copy(
                         isLoading = false,
-                        characterResults = if (getCharacter != null) //Because of Unit test that checks Fails State
-                            it.characterResults + getCharacter
-                        else it.characterResults
+                        characterResults = dbCharacters
                     )
                 }
-                page += 1
+
+                if (apiCharactersInfo.next != null){
+                    page += 1
+                }
+
             } catch (error: Exception) {
                 _characters.update {
                     it.copy(isLoading = false, failure = error)
