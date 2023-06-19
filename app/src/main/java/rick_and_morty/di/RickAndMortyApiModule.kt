@@ -1,5 +1,7 @@
 package rick_and_morty.di
 
+import android.app.Application
+import android.content.Context
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -40,22 +42,29 @@ private val moshi =
             .addConverterFactory(MoshiConverterFactory.create(moshi))
     }
 
-/*
-    private val moshi =
-        Moshi.Builder()
-        .add(KotlinJsonAdapterFactory())
-        .build()
 
-    private val retrofit: Retrofit by lazy {
-        Retrofit.Builder()
-            .baseUrl(ApiConstants.BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
+    @Provides
+    fun provideContext(application: Application): Context {
+        return application.applicationContext
+    }
+
+
+    /*
+        private val moshi =
+            Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
             .build()
-    }
 
-    val apiService: CharacterApiService by lazy {
-        retrofit.create(CharacterApiService::class.java)
-    }
+        private val retrofit: Retrofit by lazy {
+            Retrofit.Builder()
+                .baseUrl(ApiConstants.BASE_URL)
+                .addConverterFactory(MoshiConverterFactory.create(moshi))
+                .build()
+        }
 
-*/
+        val apiService: CharacterApiService by lazy {
+            retrofit.create(CharacterApiService::class.java)
+        }
+
+    */
 }

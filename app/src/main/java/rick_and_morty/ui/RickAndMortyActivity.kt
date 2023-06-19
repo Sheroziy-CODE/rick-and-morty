@@ -12,6 +12,7 @@ import io.realm.RealmConfiguration
 import kotlinx.coroutines.launch
 import rick_and_morty.eventbus.EventBus
 import rick_and_morty.handleNavigation
+import rick_and_morty.utils.NetworkUtils
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -20,10 +21,22 @@ class RickAndMortyActivity : AppCompatActivity() {
     @Inject
     lateinit var eventBus: EventBus
 
+    @Inject
+    lateinit var realm: Realm
+
+    @Inject
+
+    lateinit var networkUtils: NetworkUtils
+
     private lateinit var navHostFragment: NavHostFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (networkUtils.isInternetAvailable())
+        {
+            realm.executeTransactionAsync { it.deleteAll() }
+        }
 
         setContentView(R.layout.activity_character)
 
