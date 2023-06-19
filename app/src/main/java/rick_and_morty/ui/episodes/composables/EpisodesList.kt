@@ -36,8 +36,7 @@ fun EpisodeList(
         val episodes = episodesViewModel.episodes.collectAsState().value
         val scrollListState = rememberLazyListState()
 
-        val refreshing = episodes.isLoading
-        val swipeRefreshState = rememberPullRefreshState(refreshing, {episodesViewModel.refreshEpisodes()})
+        val swipeRefreshState = rememberPullRefreshState(episodes.isLoading, {episodesViewModel.refreshEpisodes()})
 
         Box(modifier = Modifier.fillMaxSize().pullRefresh(swipeRefreshState)) {
                 if (episodes.isLoading && episodes.episodeResults.isEmpty()) {
@@ -78,7 +77,7 @@ fun EpisodeList(
                                         }
                                 }
                         }
-                        PullRefreshIndicator(refreshing, swipeRefreshState, Modifier.align(Alignment.TopCenter))
+                        PullRefreshIndicator(episodes.isLoading, swipeRefreshState, Modifier.align(Alignment.TopCenter))
                 }
         }
 }
