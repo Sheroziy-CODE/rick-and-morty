@@ -37,6 +37,6 @@ class CharacterRepository @Inject constructor(
     }
 
     fun clearCharactersDatabase() {
-        realmInstance.clearEpisodesDatabase()
+        realmInstance.clearCharactersDatabase()
     }
 }

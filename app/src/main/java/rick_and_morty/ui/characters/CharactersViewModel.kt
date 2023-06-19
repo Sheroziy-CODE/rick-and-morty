@@ -59,6 +59,33 @@ class CharactersViewModel @Inject constructor(
     fun onCharacterSelected(characterID: Int) {
         eventBus.postEvent(NavigateToCharacterDetailsEvent(characterID))
     }
+
+    fun refreshCharacters() {
+        viewModelScope.launch {
+            try {
+                _characters.update { it.copy(isLoading = true) }
+
+                characterRepository.clearCharactersDatabase()
+                page = 1
+
+                val dbCharacters = characterRepository.getCharacters(page)
+                characterRepository.saveCharactersToDatabase(dbCharacters)
+
+                _characters.update {
+                    it.copy(
+                        isLoading = false,
+                        characterResults = dbCharacters
+                    )
+                }
+
+
+            } catch (error: Exception) {
+                _characters.update {
+                    it.copy(isLoading = false, failure = error)
+                }
+            }
+        }
+    }
 }
 
 
