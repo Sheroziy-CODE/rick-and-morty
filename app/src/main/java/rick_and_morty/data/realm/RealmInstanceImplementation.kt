@@ -3,6 +3,7 @@ package rick_and_morty.data.realm
 import io.realm.Realm
 import io.realm.RealmObject
 import rick_and_morty.data.model.episodes.EpisodeResultDto
+import rick_and_morty.data.model.episodes.realm.RealmEpisodes
 import rick_and_morty.ui.episodes.EpisodesMapper.toRealmEpisode
 
 class RealmInstanceImplementation(private val realm: Realm) : RealmInstance {
@@ -17,4 +18,11 @@ class RealmInstanceImplementation(private val realm: Realm) : RealmInstance {
             realm.copyToRealmOrUpdate(realmEpisodes)
         }
     }
+
+    override fun clearEpisodesDatabase() {
+        realm.executeTransaction { realm ->
+            realm.delete(RealmEpisodes::class.java)
+        }
+    }
+
 }

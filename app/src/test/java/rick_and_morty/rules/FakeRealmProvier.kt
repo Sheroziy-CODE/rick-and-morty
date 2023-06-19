@@ -28,6 +28,10 @@ class FakeRealmInstance : RealmInstance {
         fakeDatabase.clear()
         fakeDatabase.addAll(episodesList.map { it.toRealmEpisode() })
     }
+
+    override fun clearEpisodesDatabase() {
+        fakeDatabase.clear()
+    }
 }
 
 
