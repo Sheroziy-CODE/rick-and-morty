@@ -1,4 +1,5 @@
 import com.nhaarman.mockitokotlin2.given
+import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import io.realm.RealmList
 import kotlinx.coroutines.runBlocking
@@ -7,6 +8,7 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
+import rick_and_morty.data.model.CharacterResultsDto
 import rick_and_morty.data.model.episodes.EpisodesResponseDto
 import rick_and_morty.data.model.episodes.EpisodesInfoDto
 import rick_and_morty.data.model.episodes.EpisodeResultDto
@@ -100,6 +102,21 @@ class EpisodeRepositoryTest {
         episodeRepository.getEpisodesInfo(1)
 
         verify(mockApiRemoteDataSource).fetchRickAndMortyEpisodesData(1)
+    }
+
+    @Test
+    fun `verify saveEpisodesToDatabase has been called`() {
+
+        episodeRepository.saveEpisodesToDatabase(mockResponse.results)
+
+        verify(realmInstance).saveEpisodesToDatabase(mockResponse.results)
+    }
+
+    @Test
+    fun `verify clearEpisodesDatabase has been called`() {
+        episodeRepository.clearEpisodesDatabase()
+
+        verify(realmInstance).clearEpisodesDatabase()
     }
 
 }

@@ -7,6 +7,7 @@ import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.*
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import rick_and_morty.data.model.*
@@ -16,70 +17,91 @@ import rick_and_morty.eventbus.NavigateToCharacterDetailsEvent
 import rick_and_morty.rules.CoroutineTestRule
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class CharactersViewModelTest {
+class CharacterViewModelTest {
 
     @get:Rule
     val coroutineTestRule = CoroutineTestRule()
 
-    private val originDto = OriginDto(
-        name = "Earth (C-137)",
-        url = "https://rickandmortyapi.com/api/location/1"
-    )
-
-    private val locationDto = LocationDto(
-        name = "Citadel of Ricks",
-        url = "https://rickandmortyapi.com/api/location/3"
-    )
-
-    private val characterResultsDto = listOf(
+    private val mockCharacters = listOf(
         CharacterResultsDto(
-            id = 1,
-            name = "Chicko Micko",
-            status = "Alive",
-            species = "Human",
-            type = "",
-            gender = "Male",
-            originDto = originDto,
-            locationDto = locationDto,
-            image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-            episode = listOf(
-                "https://rickandmortyapi.com/api/episode/1",
-                "https://rickandmortyapi.com/api/episode/2",
-                "https://rickandmortyapi.com/api/episode/3",
-                "https://rickandmortyapi.com/api/episode/4",
-                "https://rickandmortyapi.com/api/episode/5"
-            ),
-            url = "https://rickandmortyapi.com/api/character/1",
-            created = "2017-11-04T18:48:46.250Z"
+            "1",
+            listOf("https://rickandmortyapi.com/api/episode/1", "https://rickandmortyapi.com/api/episode/2"),
+            "Male",
+            1,
+            "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+            LocationDto("Earth (Replacement Dimension)", ""),
+            "Rick Sanchez",
+            OriginDto("Earth (C-137)", ""),
+            "Alive",
+            "Human",
+            "",
+            ""
         )
     )
 
-    private var characterRepository: CharacterRepository = mock {
-        onBlocking { it.getCharacters(1) } doReturn (characterResultsDto)
+    private val charactersRepository: CharacterRepository = mock()
+    private val eventBus: EventBus = mock()
+
+    @Before
+    fun setup() {
+        runBlocking {
+            whenever(charactersRepository.getCharactersFromDatabase()).thenReturn(mockCharacters)
+        }
     }
 
-    private var eventBus: EventBus = mock()
-
-    private val classToTest by lazy { CharactersViewModel(characterRepository, eventBus) }
+    private val classToTest by lazy { CharactersViewModel(charactersRepository, eventBus) }
 
     @Test
-    fun `return Empty List When Init ViewModel`() = runTest {
-        given(characterRepository.getCharacters(any())).willReturn(emptyList())
-        assertThat(classToTest.characters.value.characterResults).isEmpty()
-    }
-
-    @Test
-    fun `return List When GetCharacter Called`() = runTest {
+    fun `verify getCharacters updates characters flow with results`() = runBlocking {
+        whenever(charactersRepository.getCharacters(1)).thenReturn(mockCharacters)
 
         classToTest.getCharacters()
 
-        verify(characterRepository).getCharacters(1)
+        verify(charactersRepository, atLeast(1)).getCharacters(1)
 
-        assertThat(classToTest.characters.value.characterResults).isEqualTo(characterResultsDto)
         assertThat(classToTest.characters.value.isLoading).isFalse()
-        assertThat(classToTest.characters.value.failure).isNull()
+        assertThat(classToTest.characters.value.characterResults).isEqualTo(mockCharacters)
     }
 
+    @Test
+    fun `verify getCharacters updates characters flow with error`() = runBlocking {
+        val errorMessage = "Failed to fetch characters"
+        whenever(charactersRepository.getCharacters(1)).thenThrow(RuntimeException(errorMessage))
+
+        classToTest.getCharacters()
+
+        assertThat(classToTest.characters.value.isLoading).isFalse()
+        assertThat(classToTest.characters.value.characterResults).isEmpty()
+        assertThat(classToTest.characters.value.failure).isInstanceOf(RuntimeException::class.java)
+        assertThat(classToTest.characters.value.failure?.message).isEqualTo(errorMessage)
+    }
+
+    @Test
+    fun `verify refreshCharacters clears database and fetches characters again`() = runBlocking {
+        whenever(charactersRepository.getCharacters(1)).thenReturn(mockCharacters)
+
+        classToTest.refreshCharacters()
+
+        verify(charactersRepository).clearCharactersDatabase()
+        verify(charactersRepository, times(2)).getCharacters(1)
+        verify(charactersRepository, times(2)).saveCharactersToDatabase(mockCharacters)
+
+        assertThat(classToTest.characters.value.isLoading).isFalse()
+        assertThat(classToTest.characters.value.characterResults).isEqualTo(mockCharacters)
+    }
+
+    @Test
+    fun `verify refreshCharacters updates characters flow with error`() = runBlocking {
+        val errorMessage = "Failed to refresh characters"
+        whenever(charactersRepository.getCharacters(1)).thenThrow(RuntimeException(errorMessage))
+
+        classToTest.refreshCharacters()
+
+        assertThat(classToTest.characters.value.isLoading).isFalse()
+        assertThat(classToTest.characters.value.characterResults).isEmpty()
+        assertThat(classToTest.characters.value.failure).isInstanceOf(RuntimeException::class.java)
+        assertThat(classToTest.characters.value.failure?.message).isEqualTo(errorMessage)
+    }
     @Test
     fun `post NavigateToCharacterDetailsEvent when onCharacterSelected is called`() = runTest {
         val characterID = 1
@@ -92,17 +114,6 @@ class CharactersViewModelTest {
         assertThat(postedEvent.characterId).isEqualTo(characterID)
         assertThat(postedEvent).isInstanceOf(NavigateToCharacterDetailsEvent::class.java)
     }
-
-
-    @Test
-    fun `catch An Error`() = runTest {
-        given(characterRepository.getCharacters(any())).willThrow(RuntimeException("Error"))
-
-        classToTest.getCharacters()
-
-        assertThat(classToTest.characters.value.characterResults).isEmpty()
-        assertThat(classToTest.characters.value.isLoading).isFalse()
-        assertThat(classToTest.characters.value.isFailure).isTrue()
-    }
-
 }
+
+
