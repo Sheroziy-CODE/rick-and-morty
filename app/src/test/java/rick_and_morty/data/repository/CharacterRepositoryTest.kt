@@ -12,13 +12,13 @@ import rick_and_morty.data.model.RealmCharacters
 import rick_and_morty.data.model.RealmLocation
 import rick_and_morty.data.model.RealmOrigin
 import rick_and_morty.data.model.RickAndMortyResponseDto
-import rick_and_morty.data.realm.RealmInstance
+import rick_and_morty.data.realm.LocalStorageInstance
 import rick_and_morty.data.remote.RickAndMortyApiRemoteDataSource
 
 class CharacterRepositoryTest {
 
     private lateinit var mockApiRemoteDataSource: RickAndMortyApiRemoteDataSource
-    private lateinit var realmInstance: RealmInstance
+    private lateinit var localStorageInstance: LocalStorageInstance
     private lateinit var characterRepository: CharacterRepository
 
     private val mockResponse: RickAndMortyResponseDto = mock()
@@ -28,8 +28,8 @@ class CharacterRepositoryTest {
     fun setup() {
         MockitoAnnotations.initMocks(this)
         mockApiRemoteDataSource = mock()
-        realmInstance = mock()
-        characterRepository = CharacterRepository(mockApiRemoteDataSource, realmInstance)
+        localStorageInstance = mock()
+        characterRepository = CharacterRepository(mockApiRemoteDataSource, localStorageInstance)
     }
 
     @Test
@@ -83,11 +83,11 @@ class CharacterRepositoryTest {
             url = "https://rickandmortyapi.com/api/character/1"
         }
 
-        given(realmInstance.findAll(RealmCharacters::class.java)).willReturn(listOf(mockRealmCharacter))
+        given(localStorageInstance.findAll(RealmCharacters::class.java)).willReturn(listOf(mockRealmCharacter))
 
         val result = characterRepository.getCharactersFromDatabase()
 
-        verify(realmInstance).findAll(RealmCharacters::class.java)
+        verify(localStorageInstance).findAll(RealmCharacters::class.java)
 
         assertThat(result).hasSize(1)
         assertThat(result[0].id).isEqualTo(1)
@@ -121,14 +121,14 @@ class CharacterRepositoryTest {
 
         characterRepository.saveCharactersToDatabase(charactersList)
 
-        verify(realmInstance).saveCharactersToDatabase(charactersList)
+        verify(localStorageInstance).saveCharactersToDatabase(charactersList)
     }
 
     @Test
     fun `verify clearCharactersDatabase has been called`() {
         characterRepository.clearCharactersDatabase()
 
-        verify(realmInstance).clearCharactersDatabase()
+        verify(localStorageInstance).clearCharactersDatabase()
     }
 
 }

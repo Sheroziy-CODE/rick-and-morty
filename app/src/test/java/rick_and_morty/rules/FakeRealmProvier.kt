@@ -5,11 +5,11 @@ import rick_and_morty.data.model.CharacterResultsDto
 import rick_and_morty.data.model.RealmCharacters
 import rick_and_morty.data.model.episodes.EpisodeResultDto
 import rick_and_morty.data.model.episodes.realm.RealmEpisodes
-import rick_and_morty.data.realm.RealmInstance
+import rick_and_morty.data.realm.LocalStorageInstance
 import rick_and_morty.ui.characters.CharactersMapper.toRealmCharacter
 import rick_and_morty.ui.episodes.EpisodesMapper.toRealmEpisode
 
-class FakeRealmInstance : RealmInstance {
+class FakeRealmInstance : LocalStorageInstance {
 
     private val fakeEpisodesDatabase = mutableListOf<RealmEpisodes>()
     private val fakeCharactersDatabase = mutableListOf<RealmCharacters>()

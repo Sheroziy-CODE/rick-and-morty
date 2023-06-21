@@ -9,7 +9,7 @@ import rick_and_morty.data.model.episodes.realm.RealmEpisodes
 import rick_and_morty.ui.characters.CharactersMapper.toRealmCharacter
 import rick_and_morty.ui.episodes.EpisodesMapper.toRealmEpisode
 
-class RealmInstanceImplementation(private val realm: Realm) : RealmInstance {
+class LocalStorageInstanceImplementation(private val realm: Realm) : LocalStorageInstance {
 
     override fun <T : RealmObject> findAll(clazz: Class<T>): List<T> {
         return realm.where(clazz).findAll()

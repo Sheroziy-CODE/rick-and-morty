@@ -7,11 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import rick_and_morty.data.model.episodes.EpisodeResultDto
-import rick_and_morty.data.model.episodes.realm.RealmEpisodes
-import rick_and_morty.data.realm.RealmInstance
 import rick_and_morty.data.repository.EpisodesRepository
-import rick_and_morty.ui.episodes.EpisodesMapper.toEpisodesResultDto
 import javax.inject.Inject
 
 @HiltViewModel

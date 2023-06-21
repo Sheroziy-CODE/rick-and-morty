@@ -1,5 +1,4 @@
 import com.nhaarman.mockitokotlin2.given
-import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import io.realm.RealmList
 import kotlinx.coroutines.runBlocking
@@ -8,12 +7,11 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
 import org.mockito.MockitoAnnotations
-import rick_and_morty.data.model.CharacterResultsDto
 import rick_and_morty.data.model.episodes.EpisodesResponseDto
 import rick_and_morty.data.model.episodes.EpisodesInfoDto
 import rick_and_morty.data.model.episodes.EpisodeResultDto
 import rick_and_morty.data.model.episodes.realm.RealmEpisodes
-import rick_and_morty.data.realm.RealmInstance
+import rick_and_morty.data.realm.LocalStorageInstance
 import rick_and_morty.data.remote.RickAndMortyApiRemoteDataSource
 import rick_and_morty.data.repository.EpisodesRepository
 
@@ -24,14 +22,14 @@ class EpisodeRepositoryTest {
     private lateinit var mockApiRemoteDataSource: RickAndMortyApiRemoteDataSource
 
     @Mock
-    private lateinit var realmInstance: RealmInstance
+    private lateinit var localStorageInstance: LocalStorageInstance
 
     private lateinit var episodeRepository: EpisodesRepository
 
     @Before
     fun setup() {
         MockitoAnnotations.initMocks(this)
-        episodeRepository = EpisodesRepository(mockApiRemoteDataSource, realmInstance)
+        episodeRepository = EpisodesRepository(mockApiRemoteDataSource, localStorageInstance)
     }
 
     private val mockResponse = EpisodesResponseDto(
@@ -73,13 +71,13 @@ class EpisodeRepositoryTest {
             url = "https://rickandmortyapi.com/api/episode/1"
             created = "2017-11-10T12:56:33.798Z"
         }
-        given(realmInstance.findAll(RealmEpisodes::class.java)).willReturn(listOf(mockRealmEpisode))
+        given(localStorageInstance.findAll(RealmEpisodes::class.java)).willReturn(listOf(mockRealmEpisode))
 
 
         val result = episodeRepository.getEpisodesFromDatabase()
 
 
-        verify(realmInstance).findAll(RealmEpisodes::class.java)
+        verify(localStorageInstance).findAll(RealmEpisodes::class.java)
 
 
         assertEquals(1, result.size)
@@ -109,14 +107,14 @@ class EpisodeRepositoryTest {
 
         episodeRepository.saveEpisodesToDatabase(mockResponse.results)
 
-        verify(realmInstance).saveEpisodesToDatabase(mockResponse.results)
+        verify(localStorageInstance).saveEpisodesToDatabase(mockResponse.results)
     }
 
     @Test
     fun `verify clearEpisodesDatabase has been called`() {
         episodeRepository.clearEpisodesDatabase()
 
-        verify(realmInstance).clearEpisodesDatabase()
+        verify(localStorageInstance).clearEpisodesDatabase()
     }
 
 }
