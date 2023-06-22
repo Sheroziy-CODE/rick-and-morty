@@ -59,10 +59,9 @@ class EpisodesViewModel @Inject constructor(
             try {
                 _episodes.update { it.copy(isLoading = true) }
 
-
-                episodesRepository.clearEpisodesDatabase()
                 page = 1
                 val dbEpisodes = episodesRepository.getEpisodes(page)
+                episodesRepository.clearEpisodesDatabase()
                 episodesRepository.saveEpisodesToDatabase(dbEpisodes)
 
                 _episodes.update {

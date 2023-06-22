@@ -65,10 +65,9 @@ class CharactersViewModel @Inject constructor(
             try {
                 _characters.update { it.copy(isLoading = true) }
 
-                characterRepository.clearCharactersDatabase()
                 page = 1
-
                 val dbCharacters = characterRepository.getCharacters(page)
+                characterRepository.clearCharactersDatabase()
                 characterRepository.saveCharactersToDatabase(dbCharacters)
 
                 _characters.update {
