@@ -10,7 +10,7 @@ import org.mockito.MockitoAnnotations
 import rick_and_morty.data.model.episodes.EpisodesResponseDto
 import rick_and_morty.data.model.episodes.EpisodesInfoDto
 import rick_and_morty.data.model.episodes.EpisodeResultDto
-import rick_and_morty.data.model.episodes.realm.RealmEpisodes
+import rick_and_morty.data.model.episodes.realm.LocalStorageEpisodes
 import rick_and_morty.data.realm.LocalStorageInstance
 import rick_and_morty.data.remote.RickAndMortyApiRemoteDataSource
 import rick_and_morty.data.repository.EpisodesRepository
@@ -62,7 +62,7 @@ class EpisodeRepositoryTest {
     @Test
     fun `verify getEpisodesFromDatabase has been called`() = runBlocking {
 
-        val mockRealmEpisode = RealmEpisodes().apply {
+        val mockRealmEpisode = LocalStorageEpisodes().apply {
             id = 1
             name = "Pilot"
             airDate = "December 2, 2013"
@@ -71,13 +71,13 @@ class EpisodeRepositoryTest {
             url = "https://rickandmortyapi.com/api/episode/1"
             created = "2017-11-10T12:56:33.798Z"
         }
-        given(localStorageInstance.findAll(RealmEpisodes::class.java)).willReturn(listOf(mockRealmEpisode))
+        given(localStorageInstance.findAll(LocalStorageEpisodes::class.java)).willReturn(listOf(mockRealmEpisode))
 
 
         val result = episodeRepository.getEpisodesFromDatabase()
 
 
-        verify(localStorageInstance).findAll(RealmEpisodes::class.java)
+        verify(localStorageInstance).findAll(LocalStorageEpisodes::class.java)
 
 
         assertEquals(1, result.size)

@@ -8,9 +8,9 @@ import org.junit.Before
 import org.junit.Test
 import org.mockito.MockitoAnnotations
 import rick_and_morty.data.model.CharacterResultsDto
-import rick_and_morty.data.model.RealmCharacters
-import rick_and_morty.data.model.RealmLocation
-import rick_and_morty.data.model.RealmOrigin
+import rick_and_morty.data.model.LocalStorageCharacters
+import rick_and_morty.data.model.LocalStorageLocation
+import rick_and_morty.data.model.LocalStorageOrigin
 import rick_and_morty.data.model.RickAndMortyResponseDto
 import rick_and_morty.data.realm.LocalStorageInstance
 import rick_and_morty.data.remote.RickAndMortyApiRemoteDataSource
@@ -58,17 +58,17 @@ class CharacterRepositoryTest {
     @Test
     fun `verify getCharactersFromDatabase has been called`() = runBlocking {
 
-        val mockRealmLocation = RealmLocation().apply {
+        val mockLocalStorageLocation = LocalStorageLocation().apply {
             name = "Earth"
             url = "https://rickandmortyapi.com/api/location/1"
         }
 
-        val mockRealmOrigin = RealmOrigin().apply {
+        val mockLocalStorageOrigin = LocalStorageOrigin().apply {
             name = "Earth"
             url = "https://rickandmortyapi.com/api/location/1"
         }
 
-        val mockRealmCharacter = RealmCharacters().apply {
+        val mockRealmCharacter = LocalStorageCharacters().apply {
             id = 1
             name = "Rick Sanchez"
             status = "Alive"
@@ -78,16 +78,16 @@ class CharacterRepositoryTest {
             image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg"
             created = "2017-11-04T18:50:21.651Z"
             episode = RealmList("https://rickandmortyapi.com/api/episode/1")
-            locationDto = mockRealmLocation
-            originDto = mockRealmOrigin
+            locationDto = mockLocalStorageLocation
+            originDto = mockLocalStorageOrigin
             url = "https://rickandmortyapi.com/api/character/1"
         }
 
-        given(localStorageInstance.findAll(RealmCharacters::class.java)).willReturn(listOf(mockRealmCharacter))
+        given(localStorageInstance.findAll(LocalStorageCharacters::class.java)).willReturn(listOf(mockRealmCharacter))
 
         val result = characterRepository.getCharactersFromDatabase()
 
-        verify(localStorageInstance).findAll(RealmCharacters::class.java)
+        verify(localStorageInstance).findAll(LocalStorageCharacters::class.java)
 
         assertThat(result).hasSize(1)
         assertThat(result[0].id).isEqualTo(1)

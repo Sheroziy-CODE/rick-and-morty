@@ -1,7 +1,7 @@
 package rick_and_morty.data.repository
 
 import rick_and_morty.data.model.episodes.EpisodeResultDto
-import rick_and_morty.data.model.episodes.realm.RealmEpisodes
+import rick_and_morty.data.model.episodes.realm.LocalStorageEpisodes
 import rick_and_morty.data.realm.LocalStorageInstance
 import rick_and_morty.data.remote.RickAndMortyApiRemoteDataSource
 import rick_and_morty.ui.episodes.EpisodesMapper.toEpisodesResultDto
@@ -19,8 +19,8 @@ class EpisodesRepository @Inject constructor(
         rickAndMortyApiRemoteDataSource.fetchRickAndMortyEpisodesData(page).infoDto
 
     fun getEpisodesFromDatabase(): List<EpisodeResultDto> {
-        val realmEpisodes = localStorageInstance.findAll(RealmEpisodes::class.java)
-        return realmEpisodes.map { it.toEpisodesResultDto() }
+        val localStorageEpisodes = localStorageInstance.findAll(LocalStorageEpisodes::class.java)
+        return localStorageEpisodes.map { it.toEpisodesResultDto() }
     }
 
     fun saveEpisodesToDatabase(episodesList: List<EpisodeResultDto>) {

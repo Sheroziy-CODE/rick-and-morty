@@ -2,28 +2,28 @@ package rick_and_morty.rules
 
 import io.realm.RealmObject
 import rick_and_morty.data.model.CharacterResultsDto
-import rick_and_morty.data.model.RealmCharacters
+import rick_and_morty.data.model.LocalStorageCharacters
 import rick_and_morty.data.model.episodes.EpisodeResultDto
-import rick_and_morty.data.model.episodes.realm.RealmEpisodes
+import rick_and_morty.data.model.episodes.realm.LocalStorageEpisodes
 import rick_and_morty.data.realm.LocalStorageInstance
 import rick_and_morty.ui.characters.CharactersMapper.toRealmCharacter
 import rick_and_morty.ui.episodes.EpisodesMapper.toRealmEpisode
 
-class FakeRealmInstance : LocalStorageInstance {
+class FakeLocalStorageInstance : LocalStorageInstance {
 
-    private val fakeEpisodesDatabase = mutableListOf<RealmEpisodes>()
-    private val fakeCharactersDatabase = mutableListOf<RealmCharacters>()
+    private val fakeEpisodesDatabase = mutableListOf<LocalStorageEpisodes>()
+    private val fakeCharactersDatabase = mutableListOf<LocalStorageCharacters>()
 
     var isFindAllCalled = false
     private var isSaveEpisodesToDatabaseCalled = false
     private var isSaveCharactersToDatabaseCalled = false
 
-    fun setRealmEpisodeResults(realmEpisodeResults: List<RealmEpisodes>) {
+    fun setLocalStorageEpisodeResults(realmEpisodeResults: List<LocalStorageEpisodes>) {
         fakeEpisodesDatabase.clear()
         fakeEpisodesDatabase.addAll(realmEpisodeResults)
     }
 
-    fun setRealmCharacterResults(realmCharacterResults: List<RealmCharacters>) {
+    fun setLocalStorageCharacterResults(realmCharacterResults: List<LocalStorageCharacters>) {
         fakeCharactersDatabase.clear()
         fakeCharactersDatabase.addAll(realmCharacterResults)
     }
@@ -31,8 +31,8 @@ class FakeRealmInstance : LocalStorageInstance {
     override fun <T : RealmObject> findAll(clazz: Class<T>): List<T> {
         isFindAllCalled = true
         return when (clazz) {
-            RealmCharacters::class.java -> fakeCharactersDatabase as List<T>
-            RealmEpisodes::class.java -> fakeEpisodesDatabase as List<T>
+            LocalStorageCharacters::class.java -> fakeCharactersDatabase as List<T>
+            LocalStorageEpisodes::class.java -> fakeEpisodesDatabase as List<T>
             else -> emptyList()
         }
     }
