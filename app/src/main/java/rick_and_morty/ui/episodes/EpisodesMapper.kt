@@ -6,13 +6,13 @@ import rick_and_morty.data.model.episodes.realm.LocalStorageEpisodes
 
 object EpisodesMapper {
 
-    fun EpisodeResultDto.toRealmEpisode(): LocalStorageEpisodes {
+    fun EpisodeResultDto.toLocalStorageEpisode(): LocalStorageEpisodes {
         return LocalStorageEpisodes(
             id = id,
             name = name,
             airDate = airDate,
             episode = episode,
-            characters = RealmList<String>().apply { addAll(this@toRealmEpisode.characters) },
+            characters = RealmList<String>().apply { addAll(this@toLocalStorageEpisode.characters) },
             url = url,
             created = created
         )

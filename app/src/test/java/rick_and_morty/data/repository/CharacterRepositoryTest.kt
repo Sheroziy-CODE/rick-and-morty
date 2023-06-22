@@ -68,7 +68,7 @@ class CharacterRepositoryTest {
             url = "https://rickandmortyapi.com/api/location/1"
         }
 
-        val mockRealmCharacter = LocalStorageCharacters().apply {
+        val mockLocalStorageCharacter = LocalStorageCharacters().apply {
             id = 1
             name = "Rick Sanchez"
             status = "Alive"
@@ -83,7 +83,7 @@ class CharacterRepositoryTest {
             url = "https://rickandmortyapi.com/api/character/1"
         }
 
-        given(localStorageInstance.findAll(LocalStorageCharacters::class.java)).willReturn(listOf(mockRealmCharacter))
+        given(localStorageInstance.findAll(LocalStorageCharacters::class.java)).willReturn(listOf(mockLocalStorageCharacter))
 
         val result = characterRepository.getCharactersFromDatabase()
 

@@ -6,8 +6,8 @@ import rick_and_morty.data.model.LocalStorageCharacters
 import rick_and_morty.data.model.episodes.EpisodeResultDto
 import rick_and_morty.data.model.episodes.realm.LocalStorageEpisodes
 import rick_and_morty.data.realm.LocalStorageInstance
-import rick_and_morty.ui.characters.CharactersMapper.toRealmCharacter
-import rick_and_morty.ui.episodes.EpisodesMapper.toRealmEpisode
+import rick_and_morty.ui.characters.CharactersMapper.toLocalStorageCharacter
+import rick_and_morty.ui.episodes.EpisodesMapper.toLocalStorageEpisode
 
 class FakeLocalStorageInstance : LocalStorageInstance {
 
@@ -18,14 +18,14 @@ class FakeLocalStorageInstance : LocalStorageInstance {
     private var isSaveEpisodesToDatabaseCalled = false
     private var isSaveCharactersToDatabaseCalled = false
 
-    fun setLocalStorageEpisodeResults(realmEpisodeResults: List<LocalStorageEpisodes>) {
+    fun setLocalStorageEpisodeResults(localStorageEpisodeResults: List<LocalStorageEpisodes>) {
         fakeEpisodesDatabase.clear()
-        fakeEpisodesDatabase.addAll(realmEpisodeResults)
+        fakeEpisodesDatabase.addAll(localStorageEpisodeResults)
     }
 
-    fun setLocalStorageCharacterResults(realmCharacterResults: List<LocalStorageCharacters>) {
+    fun setLocalStorageCharacterResults(localStorageCharacterResults: List<LocalStorageCharacters>) {
         fakeCharactersDatabase.clear()
-        fakeCharactersDatabase.addAll(realmCharacterResults)
+        fakeCharactersDatabase.addAll(localStorageCharacterResults)
     }
 
     override fun <T : RealmObject> findAll(clazz: Class<T>): List<T> {
@@ -40,7 +40,7 @@ class FakeLocalStorageInstance : LocalStorageInstance {
     override fun saveEpisodesToDatabase(episodesList: List<EpisodeResultDto>) {
         isSaveEpisodesToDatabaseCalled = true
         fakeEpisodesDatabase.clear()
-        fakeEpisodesDatabase.addAll(episodesList.map { it.toRealmEpisode() })
+        fakeEpisodesDatabase.addAll(episodesList.map { it.toLocalStorageEpisode() })
     }
 
     override fun clearEpisodesDatabase() {
@@ -50,7 +50,7 @@ class FakeLocalStorageInstance : LocalStorageInstance {
     override fun saveCharactersToDatabase(charactersList: List<CharacterResultsDto>) {
         isSaveCharactersToDatabaseCalled = true
         fakeCharactersDatabase.clear()
-        fakeCharactersDatabase.addAll(charactersList.map { it.toRealmCharacter() })
+        fakeCharactersDatabase.addAll(charactersList.map { it.toLocalStorageCharacter() })
     }
 
     override fun clearCharactersDatabase() {

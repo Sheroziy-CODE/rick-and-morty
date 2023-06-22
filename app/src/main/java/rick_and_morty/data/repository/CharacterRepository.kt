@@ -25,8 +25,8 @@ class CharacterRepository @Inject constructor(
 
 
     fun getCharactersFromDatabase(): List<CharacterResultsDto> {
-        val realmEpisodes = localStorageInstance.findAll(LocalStorageCharacters::class.java)
-        return realmEpisodes.map { it.toCharactersResultDto() }
+        val localStorageEpisodes = localStorageInstance.findAll(LocalStorageCharacters::class.java)
+        return localStorageEpisodes.map { it.toCharactersResultDto() }
     }
 
     fun saveCharactersToDatabase(charactersList: List<CharacterResultsDto>) {

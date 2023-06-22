@@ -62,7 +62,7 @@ class EpisodeRepositoryTest {
     @Test
     fun `verify getEpisodesFromDatabase has been called`() = runBlocking {
 
-        val mockRealmEpisode = LocalStorageEpisodes().apply {
+        val mockLocalStorageEpisode = LocalStorageEpisodes().apply {
             id = 1
             name = "Pilot"
             airDate = "December 2, 2013"
@@ -71,7 +71,7 @@ class EpisodeRepositoryTest {
             url = "https://rickandmortyapi.com/api/episode/1"
             created = "2017-11-10T12:56:33.798Z"
         }
-        given(localStorageInstance.findAll(LocalStorageEpisodes::class.java)).willReturn(listOf(mockRealmEpisode))
+        given(localStorageInstance.findAll(LocalStorageEpisodes::class.java)).willReturn(listOf(mockLocalStorageEpisode))
 
 
         val result = episodeRepository.getEpisodesFromDatabase()

@@ -10,16 +10,16 @@ import rick_and_morty.data.model.LocalStorageOrigin
 
 object CharactersMapper {
 
-    fun CharacterResultsDto.toRealmCharacter(): LocalStorageCharacters {
+    fun CharacterResultsDto.toLocalStorageCharacter(): LocalStorageCharacters {
         return LocalStorageCharacters(
             created = created,
-            episode = RealmList<String>().apply { addAll(this@toRealmCharacter.episode)},
+            episode = RealmList<String>().apply { addAll(this@toLocalStorageCharacter.episode)},
             gender = gender,
             id = id,
             image = image,
-            locationDto = locationDto.toRealmLocation(),
+            locationDto = locationDto.toLocalStorageLocation(),
             name = name,
-            originDto = originDto.toRealmOrigin(),
+            originDto = originDto.toLocalStorageOrigin(),
             species = species,
             status = status,
             type = type,
@@ -27,14 +27,14 @@ object CharactersMapper {
         )
     }
 
-    fun LocationDto.toRealmLocation(): LocalStorageLocation {
+    fun LocationDto.toLocalStorageLocation(): LocalStorageLocation {
         return LocalStorageLocation(
             name = this.name,
             url = this.url
         )
     }
 
-    fun OriginDto.toRealmOrigin(): LocalStorageOrigin {
+    fun OriginDto.toLocalStorageOrigin(): LocalStorageOrigin {
         return LocalStorageOrigin(
             name = this.name,
             url = this.url

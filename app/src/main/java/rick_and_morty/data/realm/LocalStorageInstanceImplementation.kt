@@ -6,8 +6,8 @@ import rick_and_morty.data.model.CharacterResultsDto
 import rick_and_morty.data.model.LocalStorageCharacters
 import rick_and_morty.data.model.episodes.EpisodeResultDto
 import rick_and_morty.data.model.episodes.realm.LocalStorageEpisodes
-import rick_and_morty.ui.characters.CharactersMapper.toRealmCharacter
-import rick_and_morty.ui.episodes.EpisodesMapper.toRealmEpisode
+import rick_and_morty.ui.characters.CharactersMapper.toLocalStorageCharacter
+import rick_and_morty.ui.episodes.EpisodesMapper.toLocalStorageEpisode
 
 class LocalStorageInstanceImplementation(private val realm: Realm) : LocalStorageInstance {
 
@@ -17,8 +17,8 @@ class LocalStorageInstanceImplementation(private val realm: Realm) : LocalStorag
 
     override fun saveEpisodesToDatabase(episodesList: List<EpisodeResultDto>) {
         realm.executeTransaction { realm ->
-            val realmEpisodes = episodesList.map { it.toRealmEpisode() }
-            realm.copyToRealmOrUpdate(realmEpisodes)
+            val localStorageEpisodes = episodesList.map { it.toLocalStorageEpisode() }
+            realm.copyToRealmOrUpdate(localStorageEpisodes)
         }
     }
 
@@ -30,8 +30,8 @@ class LocalStorageInstanceImplementation(private val realm: Realm) : LocalStorag
 
     override fun saveCharactersToDatabase(charactersList: List<CharacterResultsDto>) {
         realm.executeTransaction { realm ->
-            val realmCharacters = charactersList.map { it.toRealmCharacter() }
-            realm.copyToRealmOrUpdate(realmCharacters)
+            val localStorageCharacters = charactersList.map { it.toLocalStorageCharacter() }
+            realm.copyToRealmOrUpdate(localStorageCharacters)
         }
     }
 
