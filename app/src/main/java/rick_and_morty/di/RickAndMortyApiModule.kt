@@ -47,24 +47,4 @@ private val moshi =
     fun provideContext(application: Application): Context {
         return application.applicationContext
     }
-
-
-    /*
-        private val moshi =
-            Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .build()
-
-        private val retrofit: Retrofit by lazy {
-            Retrofit.Builder()
-                .baseUrl(ApiConstants.BASE_URL)
-                .addConverterFactory(MoshiConverterFactory.create(moshi))
-                .build()
-        }
-
-        val apiService: CharacterApiService by lazy {
-            retrofit.create(CharacterApiService::class.java)
-        }
-
-    */
 }

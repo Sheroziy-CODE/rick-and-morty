@@ -4,7 +4,7 @@ import io.realm.RealmObject
 import io.realm.RealmList
 import io.realm.annotations.PrimaryKey
 
-open class RealmEpisodes (
+open class LocalStorageEpisodes (
     @PrimaryKey
     var id: Int = 0,
     var name: String = "",
